@@ -1,0 +1,48 @@
+# Dockerエンジンのバージョンを指定
+version: "3.3"
+
+services:
+  # バックエンドコンテナ
+  backend:
+    # /backendディレクトリのDockerfileをビルド
+    build: ./backend
+    # /backendディレクトリのDockerfileのイメージがベースイメージ
+    image: backend
+    # コンテナ名
+    container_name: backend_container
+    # ホストPCとコンテナのポートを共有
+    ports:
+      - 3031:3031
+    # 時刻を設定
+    environment:
+      TZ: "Asia/Tokyo"
+    # PythonファイルをuwsgiでPythonのアプリケーション実行するディレクトリにマウント
+
+    # コンテナ内のディレクトリとローカルPCのディレクトリが共有するディレクトリ
+    # ※コンテナ起動時もホストPCのディレクトリが更新されれば、コンテナ内のディレクトリも更新される
+    # ※コンテナ内でファイルが生成された場合は、
+    #   指定されているホストPCのディレクトリにもコンテナ内のファイルが生成される
+    #   (ホストPCに指定されているディレクトリがない場合はディレクトリが生成される)
+    volumes:
+      - ./backend/python:/var/www/
+
+  # フロントエンドコンテナ
+  frontend:
+    # /frontendディレクトリのDockerfileをビルド
+    build: ./frontend
+    # /frontendディレクトリのDockerfileのイメージがベースイメージ
+    image: frontend
+    # コンテナ名
+    container_name: frontend_container
+    # ホストPCとコンテナのポートを共有
+    ports:
+      - 80:80
+    # buildした静的ファイルをnginxの公開するディレクトリにコピー
+    # ローカルのnginxの設定ファイルをnginxのコンテナに反映
+    volumes:
+      - ./frontend/my-app/build:/var/www
+      #- ./frontend/test:/var/www
+      - ./frontend/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    # 時刻を設定
+    environment:
+      TZ: "Asia/Tokyo"
