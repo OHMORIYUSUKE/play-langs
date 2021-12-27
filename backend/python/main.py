@@ -25,48 +25,40 @@ def main():
     print(input)
     print(lang)
     loop = asyncio.get_event_loop()
-    loop.create_task(write_posted_code())
-    out = loop.run_until_complete(run_posted_code())
-    print(out[1])
-    return jsonify(out[0] + out[1])
+    loop.create_task(write_posted_code(code,lang,input))
+    result = loop.run_until_complete(run_posted_code(lang))
+    print(result[0]) # out (正常終了)
+    print(result[1]) # err (異常終了)
+    return jsonify({"out":result[0],"err": result[1]})
 
 @app.route("/", methods=['GET'])
 def hello():
     return("hello")
 
-async def write_posted_code():
-    cmdString = "#!/bin/sh"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "gcc hello.c"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "./a.out"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "go build hello.go"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "./hello"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "node hello.js"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "javac hello.java"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "java hello"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "ghc --make hello.hs"
-    cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "./hello"
+async def write_posted_code(code,lang,input):
+    langFile = ""
+    if lang is 'C':
+        langFile = "c"
+    print("hello."+langFile)
+    text_file = open("hello."+langFile, "wt")
+    text_file.write(code)
+    ###
+    text_file = open("input.in", "wt")
+    text_file.write(input)
 
-    text_file = open("play.sh", "wt")
-    text_file.write(cmdString)
-
-async def run_posted_code():
+async def run_posted_code(lang):
     try:
-        proc = subprocess.run("sh play.sh", shell=True, stdout=PIPE, stderr=PIPE, text=True)
+        langFile = ""
+        if lang is 'C':
+            langFile = "c"
+        print("sh hello."+langFile)
+        proc = subprocess.run("sh "+langFile+".sh < input.in", shell=True, stdout=PIPE, stderr=PIPE, text=True)
         out = proc.stdout
-        err = proc.stderr
+        err = proc.stderr # エラーメッセージ
         print(out)
     except subprocess.CalledProcessError as e:
         print(f"returncode:{e.returncode}, output:{e.output}")
-    return [out,err]
+    return out,err
 
 if __name__ == "__main__":
     app.run()
