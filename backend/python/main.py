@@ -12,6 +12,17 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+@app.route("/api/v1", methods=['GET'])
+def main():
+    loop = asyncio.get_event_loop()
+    loop.create_task(task_one())
+    out = loop.run_until_complete(task_two())
+    return jsonify(out)
+
+@app.route("/", methods=['GET'])
+def hello():
+    return("hello")
+
 async def task_one():
     cmdString = "#!/bin/sh"
     cmdString = cmdString + "\n\n"
@@ -25,14 +36,6 @@ async def task_two():
     out = proc.stdout
     print(out)
     return out
-
-
-@app.route("/api/v1", methods=['GET'])
-def main():
-    loop = asyncio.get_event_loop()
-    loop.create_task(task_one())
-    out = loop.run_until_complete(task_two())
-    return jsonify(out)
 
 if __name__ == "__main__":
     app.run()

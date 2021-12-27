@@ -1,4 +1,4 @@
-FROM debian:9
+FROM debian
 
 RUN apt-get update && apt-get install -y -q sudo 
 
@@ -17,7 +17,7 @@ RUN sudo apt-get install -y -q nodejs
 # Haskellの環境構築
 RUN sudo apt-get install -y -q haskell-platform
 # Pythonの環境構築
-RUN sudo apt-get install -y -q python3.9
+RUN sudo apt-get install -y -q python3
 #######################################################################
 # pip3コマンドをインストール
 RUN sudo apt install -y -q python3-pip
