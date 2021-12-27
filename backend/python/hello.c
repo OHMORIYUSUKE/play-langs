@@ -1,7 +1,12 @@
 #include <stdio.h>
 
-int main()
+int main(int argc, char *argv[])
 {
-  printf("C Hello World\n");
-  return 0;
+        int n;
+ 
+        printf("Please input number: ");
+        scanf("%d", &n);
+        printf("Your number is %d¥n", n);
+
+        return 0;
 }
