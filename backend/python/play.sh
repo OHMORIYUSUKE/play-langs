@@ -14,6 +14,6 @@ javac hello.java
 
 java hello
 
-echo '-----------------------'ghc --make hello.hs
+ghc --make hello.hs
 
 ./hello

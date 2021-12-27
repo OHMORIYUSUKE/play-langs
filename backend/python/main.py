@@ -17,7 +17,8 @@ def main():
     loop = asyncio.get_event_loop()
     loop.create_task(write_posted_code())
     out = loop.run_until_complete(run_posted_code())
-    return jsonify(out)
+    print(out[1])
+    return jsonify(out[0] + out[1])
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -36,13 +37,10 @@ async def write_posted_code():
     cmdString = cmdString + "\n\n"
     cmdString = cmdString + "node hello.js"
     cmdString = cmdString + "\n\n"
-    ###################################################
     cmdString = cmdString + "javac hello.java"
     cmdString = cmdString + "\n\n"
     cmdString = cmdString + "java hello"
-    ###################################################
     cmdString = cmdString + "\n\n"
-    cmdString = cmdString + "echo '-----------------------'"
     cmdString = cmdString + "ghc --make hello.hs"
     cmdString = cmdString + "\n\n"
     cmdString = cmdString + "./hello"
@@ -54,10 +52,11 @@ async def run_posted_code():
     try:
         proc = subprocess.run("sh play.sh", shell=True, stdout=PIPE, stderr=PIPE, text=True)
         out = proc.stdout
+        err = proc.stderr
         print(out)
     except subprocess.CalledProcessError as e:
         print(f"returncode:{e.returncode}, output:{e.output}")
-    return out
+    return [out,err]
 
 if __name__ == "__main__":
     app.run()
