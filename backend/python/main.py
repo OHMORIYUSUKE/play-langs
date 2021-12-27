@@ -12,18 +12,20 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-@app.route("/api/v1", methods=['GET'])
-def main():
+@app.route("/api/v1/play", methods=['GET','POST'])
+def main(request):
     loop = asyncio.get_event_loop()
-    loop.create_task(task_one())
-    out = loop.run_until_complete(task_two())
+    loop.create_task(write_posted_code(request))
+    out = loop.run_until_complete(run_posted_code())
     return jsonify(out)
 
 @app.route("/", methods=['GET'])
 def hello():
     return("hello")
 
-async def task_one():
+async def write_posted_code(request):
+    body = request.json
+    print(body)
     cmdString = "#!/bin/sh"
     cmdString = cmdString + "\n\n"
     cmdString = cmdString + "python3 test.py"
@@ -31,7 +33,7 @@ async def task_one():
     text_file = open("play.sh", "wt")
     text_file.write(cmdString)
 
-async def task_two():
+async def run_posted_code():
     proc = subprocess.run("sh play.sh", shell=True, stdout=PIPE, stderr=PIPE, text=True)
     out = proc.stdout
     print(out)
