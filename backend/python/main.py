@@ -1,7 +1,6 @@
 import subprocess
 from subprocess import PIPE
 import asyncio
-
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from urllib.request import urlopen
@@ -21,9 +20,6 @@ def main():
     code = body["code"]
     input = body["input"]
     lang = body["lang"]
-    print(code)
-    print(input)
-    print(lang)
     loop = asyncio.get_event_loop()
     loop.create_task(write_posted_code(code,lang,input))
     result = loop.run_until_complete(run_posted_code(lang))
@@ -39,10 +35,11 @@ async def write_posted_code(code,lang,input):
     langFile = ""
     if lang is 'C':
         langFile = "c"
+    ## コードをファイルに書き込む
     print("hello."+langFile)
     text_file = open("hello."+langFile, "wt")
     text_file.write(code)
-    ###
+    ## inputを与える
     text_file = open("input.in", "wt")
     text_file.write(input)
 
