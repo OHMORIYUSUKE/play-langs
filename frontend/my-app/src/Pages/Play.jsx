@@ -1,6 +1,9 @@
 import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 function Play() {
+  const [response, setResponse] = useState([]);
+
   function submit() {
     const inputElementCode = document.getElementById("code");
     const inputValueCode = inputElementCode.value;
@@ -29,11 +32,10 @@ function Play() {
       )
       .then((res) => {
         console.log(res);
-        window.alert("投稿が完了しました。");
+        setResponse(res.data);
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error.response));
-        window.alert("投稿に失敗しました。");
       });
   }
 
@@ -57,6 +59,8 @@ function Play() {
       </textarea>
       <br />
       <button onClick={submit}>実行</button>
+      <br />
+      {response.err ? <code>{response.err}</code> : <code>{response.out}</code>}
     </>
   );
 }
