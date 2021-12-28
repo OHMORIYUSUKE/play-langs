@@ -32,9 +32,8 @@ def hello():
     return("hello")
 
 async def write_posted_code(code,lang,input):
-    langFile = ""
-    if lang is 'C':
-        langFile = "c"
+    print("言語 : "+lang)
+    langFile = select_lang(lang)
     ## コードをファイルに書き込む
     print("hello."+langFile)
     text_file = open("hello."+langFile, "wt")
@@ -45,17 +44,34 @@ async def write_posted_code(code,lang,input):
 
 async def run_posted_code(lang):
     try:
-        langFile = ""
-        if lang is 'C':
-            langFile = "c"
+        print("言語 : "+lang)
+        langFile = select_lang(lang)
         print("sh hello."+langFile)
-        proc = subprocess.run("sh "+langFile+".sh < input.in", shell=True, stdout=PIPE, stderr=PIPE, text=True)
+        proc = subprocess.run("sh "+lang+".sh < input.in", shell=True, stdout=PIPE, stderr=PIPE, text=True)
         out = proc.stdout
         err = proc.stderr # エラーメッセージ
         print(out)
     except subprocess.CalledProcessError as e:
         print(f"returncode:{e.returncode}, output:{e.output}")
     return out,err
+
+def select_lang(lang):
+    langFile = "kuso"
+    if lang == 'c':
+        langFile = "c"
+    elif lang == 'ruby':
+        langFile = "rb"
+    elif lang == 'haskell':
+        langFile = "hs"
+    elif lang == 'python':
+        langFile = "py"
+    elif lang == 'java':
+        langFile = "java"
+    elif lang == 'go':
+        langFile = "go"
+    elif lang == 'javascript':
+        langFile = "js"
+    return langFile
 
 if __name__ == "__main__":
     app.run()
