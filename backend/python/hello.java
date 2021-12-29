@@ -1,5 +1,5 @@
-class hell {
-	public static void main(String[] args) {
-		System.out.println("Hello, world. Java!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	}
-}
+i = 0
+
+while i < 1000000000000000000000000000000000000:
+    print(i)
+    i += 1

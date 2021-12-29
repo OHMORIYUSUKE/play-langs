@@ -26,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState({});
   const editorRef = useRef(null);
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -44,6 +44,14 @@ function Play() {
   };
 
   const [mode, setMode] = useState("vs-dark");
+
+  /////
+  let colorOutBackGround = "rgb(29, 31, 33)";
+  let colorOutFont = "white";
+  if (mode === "light") {
+    colorOutBackGround = "";
+    colorOutFont = "black";
+  }
 
   const handleChangeMode = (event) => {
     setMode(event.target.value);
@@ -75,6 +83,7 @@ function Play() {
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error.response));
+        window.alert("エラーが発生しました。\n・実行時間が長すぎます。");
       });
   }
 
@@ -88,7 +97,7 @@ function Play() {
             <Item>
               <h4 style={{ textAlign: "center", margin: "5px" }}>コード</h4>
               <Editor
-                height="60vh"
+                height="70vh"
                 theme={mode}
                 language={lang}
                 onMount={handleEditorDidMount}
@@ -103,31 +112,44 @@ function Play() {
               <h4 style={{ textAlign: "center", margin: "5px" }}>実行結果</h4>
               {response.err ? (
                 <div
-                  style={{ backgroundColor: "rgb(29, 31, 33)", padding: "2px" }}
+                  style={{
+                    backgroundColor: colorOutBackGround,
+                    minHeight: "130px",
+                    padding: "10px",
+                  }}
                 >
                   <code
                     style={{
                       whiteSpace: "pre-wrap",
-                      color: "white",
+                      color: "red",
+                      overflowWrap: "break-word",
                     }}
-                    dangerouslySetInnerHTML={{ __html: response.err }}
-                  ></code>
+                  >
+                    {response.err}
+                  </code>
                 </div>
               ) : (
                 <div
-                  style={{ backgroundColor: "rgb(29, 31, 33)", padding: "2px" }}
+                  style={{
+                    backgroundColor: colorOutBackGround,
+                    minHeight: "130px",
+                    padding: "10px",
+                  }}
                 >
                   <code
                     style={{
                       whiteSpace: "pre-wrap",
-                      color: "white",
+                      color: colorOutFont,
+                      overflowWrap: "break-word",
                     }}
-                    dangerouslySetInnerHTML={{ __html: response.out }}
-                  ></code>
+                  >
+                    {response.out}
+                  </code>
                 </div>
               )}
             </Item>
           </Grid>
+          {/* 設定(右側) */}
           <Grid item xs={3}>
             <Item>
               <h4 style={{ textAlign: "center", margin: "8px" }}>設定</h4>
@@ -170,6 +192,14 @@ function Play() {
               >
                 実行
               </Button>
+            </Item>
+            <Item style={{ marginTop: "1rem" }}>
+              <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
+              <p>３秒いないで実行できるコードにしてください。</p>
+              <p>
+                <b>Java </b>を実行する際は、実行クラスの名前を<b> hello </b>
+                にしてください。
+              </p>
             </Item>
           </Grid>
         </Grid>

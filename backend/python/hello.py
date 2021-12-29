@@ -1,1 +1,2 @@
-print("hello Python")
+hoge = input("in : "
+print(hoge)

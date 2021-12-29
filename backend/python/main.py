@@ -1,5 +1,5 @@
 import subprocess
-from subprocess import PIPE
+from subprocess import PIPE,TimeoutExpired
 import asyncio
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
@@ -23,6 +23,7 @@ def main():
     loop = asyncio.get_event_loop()
     loop.create_task(write_posted_code(code,lang,input))
     result = loop.run_until_complete(run_posted_code(lang))
+    print(result)
     print(result[0]) # out (正常終了)
     print(result[1]) # err (異常終了)
     return jsonify({"out":result[0],"err": result[1]})
@@ -47,18 +48,24 @@ async def run_posted_code(lang):
         print("言語 : "+lang)
         langFile = select_lang(lang)
         print("sh hello."+langFile)
-        proc = subprocess.run("sh "+lang+".sh < input.in", shell=True, stdout=PIPE, stderr=PIPE, text=True)
+        proc = subprocess.run("sh "+lang+".sh < input.in", timeout=3, shell=True, stdout=PIPE, stderr=PIPE, text=True)
         out = proc.stdout
         err = proc.stderr # エラーメッセージ
         print(out)
-    except subprocess.CalledProcessError as e:
-        print(f"returncode:{e.returncode}, output:{e.output}")
+    except TimeoutExpired as e:
+        print(f"ERROR : {e}")
+        err = "ERROR : " + str(e) + "\nMessage : ３秒いないで実行できるコードにしてください。"
+        return "",err
     return out,err
 
 def select_lang(lang):
-    langFile = "kuso"
+    langFile = ""
     if lang == 'c':
         langFile = "c"
+    elif lang == 'cpp':
+        langFile = "cpp"
+    elif lang == 'shell':
+        langFile = "sh"
     elif lang == 'ruby':
         langFile = "rb"
     elif lang == 'haskell':
