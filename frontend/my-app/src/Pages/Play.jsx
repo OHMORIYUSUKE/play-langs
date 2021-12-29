@@ -60,6 +60,18 @@ function Play() {
     setMode(event.target.value);
   };
   ///////////
+  function copy_to_clipboard() {
+    if (navigator.clipboard) {
+      let element = document.getElementById("outPut");
+      var copyText = element.innerText;
+      navigator.clipboard.writeText(copyText).then(function () {
+        alert("コピーしました。");
+      });
+    } else {
+      alert("対応していません。");
+    }
+  }
+  //////////
   function submit() {
     if (lang === "") {
       window.alert("言語の種類が選択されていません。");
@@ -113,15 +125,26 @@ function Play() {
               />
               <br />
               <h4 style={{ textAlign: "center", margin: "5px" }}>実行結果</h4>
-              {response.err ? (
-                <div
+              <div
+                style={{
+                  backgroundColor: colorOutBackGround,
+                  minHeight: "130px",
+                  padding: "10px",
+                  position: "relative",
+                }}
+              >
+                <Button
+                  onClick={copy_to_clipboard}
                   style={{
-                    backgroundColor: colorOutBackGround,
-                    minHeight: "130px",
-                    padding: "10px",
+                    position: "absolute",
+                    right: "10px",
                   }}
                 >
+                  <b>📋 コピー</b>
+                </Button>
+                {response.err ? (
                   <code
+                    id="outPut"
                     style={{
                       whiteSpace: "pre-wrap",
                       color: "red",
@@ -130,16 +153,9 @@ function Play() {
                   >
                     {response.err}
                   </code>
-                </div>
-              ) : (
-                <div
-                  style={{
-                    backgroundColor: colorOutBackGround,
-                    minHeight: "130px",
-                    padding: "10px",
-                  }}
-                >
+                ) : (
                   <code
+                    id="outPut"
                     style={{
                       whiteSpace: "pre-wrap",
                       color: colorOutFont,
@@ -148,8 +164,8 @@ function Play() {
                   >
                     {response.out}
                   </code>
-                </div>
-              )}
+                )}
+              </div>
             </Item>
           </Grid>
           {/* 設定(右側) */}
