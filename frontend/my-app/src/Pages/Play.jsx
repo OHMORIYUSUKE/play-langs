@@ -60,18 +60,53 @@ function Play() {
     setMode(event.target.value);
   };
   ///////////
-  function copy_to_clipboard() {
-    if (navigator.clipboard) {
-      let element = document.getElementById("outPut");
-      var copyText = element.innerText;
-      navigator.clipboard.writeText(copyText).then(function () {
-        alert("コピーしました。");
-      });
+  // function copy_to_clipboard() {
+  //   if (navigator.clipboard) {
+  //     let element = document.getElementById("outPut");
+  //     var copyText = element.innerText;
+  //   navigator.clipboard.writeText(copyText).then(function () {
+  //     alert("コピーしました。");
+  //   });
+  // } else {
+  //   alert("対応していません。");
+  // }
+  // }
+  // //////////
+  // return a promise
+  function copyToClipboard(textToCopy) {
+    // navigator clipboard api needs a secure context (https)
+    if (navigator.clipboard && window.isSecureContext) {
+      // navigator clipboard api method'
+      return navigator.clipboard.writeText(textToCopy);
     } else {
-      alert("対応していません。");
+      // text area method
+      let textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      // make the textarea out of viewport
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+        // here the magic happens
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+      });
     }
   }
-  //////////
+  function copy_to_clipboard() {
+    let element = document.getElementById("outPut");
+    var copyText = element.innerText;
+    try {
+      copyToClipboard(copyText);
+      window.alert("コピーしました。");
+    } catch (error) {
+      window.alert("コピーできませんでした。");
+    }
+  }
+  ///
   function submit() {
     if (lang === "") {
       window.alert("言語の種類が選択されていません。");
