@@ -26,6 +26,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
+  //ip
+  const ipaddress = window.location.hostname;
+  //
   const [response, setResponse] = useState({});
   const editorRef = useRef(null);
   function handleEditorDidMount(editor, monaco) {
@@ -65,7 +68,7 @@ function Play() {
 
     axios
       .post(
-        "http://localhost:3031/api/v1/play",
+        `http://${ipaddress}:3031/api/v1/play`,
         {
           code: editorRef.current.getValue(),
           input: editorRefIn.current.getValue(),
