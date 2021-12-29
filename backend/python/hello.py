@@ -1,2 +1,1 @@
-hoge = input("in : "
-print(hoge)
+print(11)

@@ -9,7 +9,7 @@ services:
     # /backendディレクトリのDockerfileのイメージがベースイメージ
     image: backend
     # コンテナ名
-    container_name: backend_container
+    container_name: backend_container_play_langs
     # ホストPCとコンテナのポートを共有
     ports:
       - 3031:3031
@@ -33,7 +33,7 @@ services:
     # /frontendディレクトリのDockerfileのイメージがベースイメージ
     image: frontend
     # コンテナ名
-    container_name: frontend_container
+    container_name: frontend_container_play_langs
     # ホストPCとコンテナのポートを共有
     ports:
       - 80:80
