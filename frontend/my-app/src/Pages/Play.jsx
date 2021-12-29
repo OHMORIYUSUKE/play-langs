@@ -86,7 +86,7 @@ function Play() {
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error.response));
-        window.alert("エラーが発生しました。\n・実行時間が長すぎます。");
+        window.alert("エラーが発生しました。");
       });
   }
 
