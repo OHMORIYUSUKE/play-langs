@@ -17,6 +17,9 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Divider } from "@mui/material";
 
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import { styled } from "@mui/material/styles";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -26,6 +29,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
+  const [alertState, setStateAlert] = useState({
+    open: false,
+  });
+  const [resState, setStateRes] = useState({
+    waiting: false,
+  });
+  const { waiting } = resState;
+  const { open } = alertState;
+  function handleClose() {
+    setStateAlert({ open: false });
+  }
   //ip
   const ipaddress = window.location.hostname;
   //
@@ -60,19 +74,6 @@ function Play() {
     setMode(event.target.value);
   };
   ///////////
-  // function copy_to_clipboard() {
-  //   if (navigator.clipboard) {
-  //     let element = document.getElementById("outPut");
-  //     var copyText = element.innerText;
-  //   navigator.clipboard.writeText(copyText).then(function () {
-  //     alert("コピーしました。");
-  //   });
-  // } else {
-  //   alert("対応していません。");
-  // }
-  // }
-  // //////////
-  // return a promise
   function copyToClipboard(textToCopy) {
     // navigator clipboard api needs a secure context (https)
     if (navigator.clipboard && window.isSecureContext) {
@@ -101,7 +102,8 @@ function Play() {
     var copyText = element.innerText;
     try {
       copyToClipboard(copyText);
-      window.alert("コピーしました。");
+      //window.alert("コピーしました。");
+      setStateAlert({ open: true });
     } catch (error) {
       window.alert("コピーできませんでした。");
     }
@@ -112,7 +114,7 @@ function Play() {
       window.alert("言語の種類が選択されていません。");
       return;
     }
-
+    setStateRes({ waiting: true });
     axios
       .post(
         `http://${ipaddress}:3031/api/v1/play`,
@@ -130,6 +132,7 @@ function Play() {
       .then((res) => {
         console.log(res);
         setResponse(res.data);
+        setStateRes({ waiting: false });
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error.response));
@@ -140,6 +143,35 @@ function Play() {
   return (
     <>
       <Header />
+      <Snackbar
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={open}
+        onClose={handleClose}
+        message="I love snacks"
+      >
+        <MuiAlert
+          color="success"
+          severity="success"
+          elevation={6}
+          variant="filled"
+        >
+          コピーしました。
+        </MuiAlert>
+      </Snackbar>
+      {/* 実行中 */}
+      <Snackbar
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={waiting}
+        onClose={handleClose}
+        message="I love snacks"
+      >
+        <MuiAlert color="info" severity="info" elevation={6} variant="filled">
+          実行中...
+        </MuiAlert>
+      </Snackbar>
+      {/*  */}
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 2em" }}>
         <h2>コードを実行</h2>
         <Grid container spacing={2}>
@@ -249,7 +281,7 @@ function Play() {
             </Item>
             <Item style={{ marginTop: "1rem" }}>
               <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
-              <p>３秒いないで実行できるコードにしてください。</p>
+              <p>３秒以内で実行できるコードにしてください。</p>
               <p>
                 <b>Java </b>を実行する際は、実行クラスの名前を<b> hello </b>
                 にしてください。

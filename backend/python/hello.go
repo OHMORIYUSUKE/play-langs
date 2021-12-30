@@ -1,5 +1,1 @@
-package main
-import "fmt"
-func main() {
-    fmt.Println("Go Hello World")
-}
+print(1111)

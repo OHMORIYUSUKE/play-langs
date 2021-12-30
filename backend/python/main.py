@@ -54,7 +54,7 @@ async def run_posted_code(lang):
         print(out)
     except TimeoutExpired as e:
         print(f"ERROR : {e}")
-        err = "ERROR : " + str(e) + "\nMessage : ３秒いないで実行できるコードにしてください。"
+        err = "ERROR : " + str(e) + "\nMessage : ３秒以内で実行できるコードにしてください。"
         return "",err
     return out,err
 
