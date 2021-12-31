@@ -1,1 +1,2 @@
-print(1111)
+name = input("language name : \n")
+print("Hello " + name + "!!"

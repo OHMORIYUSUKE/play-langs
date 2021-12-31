@@ -1,1 +1,2 @@
-print(1111)
+while True:
+    print(1)

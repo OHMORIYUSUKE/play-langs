@@ -31,19 +31,23 @@ const Item = styled(Paper)(({ theme }) => ({
 function Play() {
   const [alertState, setStateAlert] = useState({
     open: false,
+    text: "",
   });
   const [resState, setStateRes] = useState({
     waiting: false,
   });
   const { waiting } = resState;
-  const { open } = alertState;
+  const { open, text } = alertState;
   function handleClose() {
     setStateAlert({ open: false });
   }
   //ip
   const ipaddress = window.location.hostname;
   //
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState({
+    out: "",
+    err: "",
+  });
   const editorRef = useRef(null);
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -103,7 +107,7 @@ function Play() {
     try {
       copyToClipboard(copyText);
       //window.alert("コピーしました。");
-      setStateAlert({ open: true });
+      setStateAlert({ open: true, text: "コピーしました ❕" });
     } catch (error) {
       window.alert("コピーできませんでした。");
     }
@@ -115,6 +119,7 @@ function Play() {
       return;
     }
     setStateRes({ waiting: true });
+    setResponse({ out: "Running... 🏃🏻" });
     axios
       .post(
         `http://${ipaddress}:3031/api/v1/play`,
@@ -133,10 +138,17 @@ function Play() {
         console.log(res);
         setResponse(res.data);
         setStateRes({ waiting: false });
+        setStateAlert({ open: true, text: "実行完了 🎉" });
       })
       .catch((error) => {
-        console.log("Error : " + JSON.stringify(error.response));
-        window.alert("エラーが発生しました。");
+        console.log("Error : " + JSON.stringify(error));
+        setStateRes({ waiting: false });
+        setResponse({
+          err:
+            "サーバーでエラーが発生しました。⚠\nError Message : " +
+            error.message,
+        });
+        window.alert("サーバーでエラーが発生しました。");
       });
   }
 
@@ -144,11 +156,10 @@ function Play() {
     <>
       <Header />
       <Snackbar
-        autoHideDuration={3000}
+        autoHideDuration={3500}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={open}
         onClose={handleClose}
-        message="I love snacks"
       >
         <MuiAlert
           color="success"
@@ -156,7 +167,7 @@ function Play() {
           elevation={6}
           variant="filled"
         >
-          コピーしました。
+          {text}
         </MuiAlert>
       </Snackbar>
       {/* 実行中 */}
@@ -269,15 +280,32 @@ function Play() {
                 </Select>
                 <FormHelperText>実行したい言語を選択</FormHelperText>
               </FormControl>
-              <Button
-                style={{ marginLeft: "15px" }}
-                onClick={submit}
-                variant="contained"
-                disableElevation
-                size="large"
-              >
-                実行
-              </Button>
+              {waiting ? (
+                <>
+                  <Button
+                    style={{ marginLeft: "15px" }}
+                    onClick={submit}
+                    variant="contained"
+                    disableElevation
+                    size="large"
+                    disabled
+                  >
+                    実行中...
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    style={{ marginLeft: "15px" }}
+                    onClick={submit}
+                    variant="contained"
+                    disableElevation
+                    size="large"
+                  >
+                    実行
+                  </Button>
+                </>
+              )}
             </Item>
             <Item style={{ marginTop: "1rem" }}>
               <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>

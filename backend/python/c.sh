@@ -1,5 +1,5 @@
 #!/bin/bash
 
-gcc hello.c
+gcc hello.c -lm
 
 ./a.out
