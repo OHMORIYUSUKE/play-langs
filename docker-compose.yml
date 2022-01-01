@@ -25,6 +25,7 @@ services:
     #   (ホストPCに指定されているディレクトリがない場合はディレクトリが生成される)
     volumes:
       - ./backend/python:/var/www/
+      - ./backend/conf/sudoers:/etc/sudoers
 
   # フロントエンドコンテナ
   frontend:

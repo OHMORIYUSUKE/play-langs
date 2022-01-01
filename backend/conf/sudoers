@@ -1,0 +1,38 @@
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+Defaults timestamp_timeout = 0
+Defaults passprompt = "%u@%h Password: "
+Cmnd_Alias SHUTDOWN = /sbin/halt, /sbin/shutdown, /sbin/poweroff, \
+/sbin/reboot, /sbin/fastboot, /sbin/init
+Cmnd_Alias REMOVE = /bin/rm, /usr/sbin/unlink, /bin/rmdir, /sbin/newfs
+Cmnd_Alias IFCONFIG = /sbin/ifconfig
+Cmnd_Alias NDD = /usr/sbin/ndd
+%wheel ALL=(ALL) ALL, !SHUTDOWN,!REMOVE,!IFCONFIG,!NDD
+play ALL=(ALL) ALL, !SHUTDOWN,!REMOVE,!IFCONFIG,!NDD
+
+# See sudoers(5) for more information on "@include" directives:
+
+@includedir /etc/sudoers.d
+
