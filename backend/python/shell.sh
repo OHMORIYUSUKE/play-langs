@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo bash hello.sh
+sh hello.sh

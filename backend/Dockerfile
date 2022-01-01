@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:11
 
 RUN apt-get update && apt-get install -y -q sudo 
 
@@ -42,54 +42,65 @@ RUN pip3 install -r requirements.txt
 WORKDIR /
 
 ARG USERNAME="play"
-ARG PASS="playspassword"
-RUN useradd -p ${PASS} -rm -d /home/${USERNAME} -s /bin/bash -g root -G sudo -u 1001 ${USERNAME}
+RUN groupadd players
+RUN useradd ${USERNAME} -g players
 # sudo
 RUN groupadd wheel
 RUN usermod -aG wheel play
 COPY ./conf/sudoers /etc/sudoers
-# パーミッション
-RUN chmod o-w bin/
-RUN chmod o-w boot/
-RUN chmod o-w dev/
-RUN chmod o-w etc/
-RUN chmod o-w home/
-RUN chmod o-w lib/
-RUN chmod o-w lib64/
-RUN chmod o-w media/
-RUN chmod o-w mnt/
-RUN chmod o-w opt/
-RUN chmod o-w proc/
-RUN chmod o-w root/
-RUN chmod o-w run/
-RUN chmod o-w sbin/
-RUN chmod o-w srv/
-# RUN chmod o-w sys/
-RUN chmod o-w tmp/
-RUN chmod o-w usr/
-RUN chmod o-w var/
-## /var
-WORKDIR /var
-RUN chmod o-w www/
-# RUN chmod o-w c.sh
-# RUN chmod o-w cpp.sh
-# RUN chmod o-w go.sh
-# RUN chmod o-w haskell.sh
-# RUN chmod o-w java.sh
-# RUN chmod o-w javascript.sh
-# RUN chmod o-w python.sh
-# RUN chmod o-w ruby.sh
-# RUN chmod o-w shell.sh
-# RUN chmod o-w main.py
 
+# パーミッション
+RUN chmod +t bin/
+RUN chmod +t boot/
+RUN chmod +t dev/
+RUN chmod +t etc/
+RUN chmod +t home/
+RUN chmod +t lib/
+RUN chmod +t lib64/
+RUN chmod +t media/
+RUN chmod +t mnt/
+RUN chmod +t opt/
+RUN chmod +t proc/
+RUN chmod +t root/
+RUN chmod +t run/
+RUN chmod +t sbin/
+RUN chmod +t srv/
+# RUN chmod +t sys/
+RUN chmod +t tmp/
+RUN chmod +t var/
+# RUN chmod o+wrx var/www/
+## /var
+WORKDIR /var/www
+RUN chmod +t c.sh
+RUN chmod +t cpp.sh
+RUN chmod +t go.sh
+RUN chmod +t haskell.sh
+RUN chmod +t java.sh
+RUN chmod +t javascript.sh
+RUN chmod +t python.sh
+RUN chmod +t ruby.sh
+RUN chmod +t shell.sh
+RUN chmod +t main.py
+# 権限付与
+RUN sudo chmod o+w hello.py
+RUN sudo chmod o+w hello.sh
+RUN sudo chmod o+w hello.java
+RUN sudo chmod o+w hello.c
+RUN sudo chmod o+w hello.rb
+RUN sudo chmod o+w hello.cpp
+RUN sudo chmod o+w hello.hs
+RUN sudo chmod o+w hello.js
+RUN sudo chmod o+w hello.go
+RUN sudo chmod o+w input.in
+
+
+# uwsgiを実行するコマンド
+CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
 # 制限済みuser(play)になる
 USER ${USERNAME}
 # user(play)の作業ディレクトリ
 WORKDIR /var/www/
 
-
-# uwsgiを実行するコマンド
-CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
 
 #### メモ
 # > docker compose build --build-arg PASS=何か

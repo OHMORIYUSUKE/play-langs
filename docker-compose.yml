@@ -23,9 +23,8 @@ services:
     # ※コンテナ内でファイルが生成された場合は、
     #   指定されているホストPCのディレクトリにもコンテナ内のファイルが生成される
     #   (ホストPCに指定されているディレクトリがない場合はディレクトリが生成される)
-    volumes:
-      - ./backend/python:/var/www/
-      - ./backend/conf/sudoers:/etc/sudoers
+    # volumes:
+    #   - ./backend/python:/var/www/
 
   # フロントエンドコンテナ
   frontend:
