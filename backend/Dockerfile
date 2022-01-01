@@ -42,8 +42,7 @@ RUN pip3 install -r requirements.txt
 WORKDIR /
 
 ARG USERNAME="play"
-RUN groupadd players
-RUN useradd ${USERNAME} -g players
+RUN useradd ${USERNAME}
 # sudo
 RUN groupadd wheel
 RUN usermod -aG wheel play
