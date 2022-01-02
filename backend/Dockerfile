@@ -42,7 +42,8 @@ RUN pip3 install -r requirements.txt
 WORKDIR /
 
 ARG USERNAME="play"
-RUN useradd ${USERNAME}
+ARG PASSWD="playspasswd"
+RUN useradd -p ${PASSWD} ${USERNAME}
 # sudo
 RUN groupadd wheel
 RUN usermod -aG wheel play
@@ -53,7 +54,8 @@ RUN chmod +t bin/
 RUN chmod +t boot/
 RUN chmod +t dev/
 RUN chmod +t etc/
-RUN chmod +t home/
+# go キャッシュ用
+RUN sudo chmod o+w home/
 RUN chmod +t lib/
 RUN chmod +t lib64/
 RUN chmod +t media/
@@ -64,10 +66,8 @@ RUN chmod +t root/
 RUN chmod +t run/
 RUN chmod +t sbin/
 RUN chmod +t srv/
-# RUN chmod +t sys/
 RUN chmod +t tmp/
 RUN chmod +t var/
-# RUN chmod o+wrx var/www/
 ## /var
 WORKDIR /var/www
 RUN chmod +t c.sh
@@ -91,14 +91,24 @@ RUN sudo chmod o+w hello.hs
 RUN sudo chmod o+w hello.js
 RUN sudo chmod o+w hello.go
 RUN sudo chmod o+w input.in
-
-
-# uwsgiを実行するコマンド
-CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
+# 実行ファイル
+# C
+RUN sudo chmod o+w a.out
+# C++
+RUN sudo chmod o+w out
+# Go
+RUN sudo chmod o+w hello
+# Haskell
+RUN sudo chmod o+w hello.hi
+RUN sudo chmod o+w hello.o
+# Java
+RUN sudo chmod o+w hello.class
 # 制限済みuser(play)になる
 USER ${USERNAME}
 # user(play)の作業ディレクトリ
 WORKDIR /var/www/
+# uwsgiを実行するコマンド
+CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
 
 
 #### メモ

@@ -67,7 +67,7 @@ function Play() {
   const [mode, setMode] = useState("vs-dark");
 
   /////
-  let colorOutBackGround = "rgb(29, 31, 33)";
+  let colorOutBackGround = "#1E1E1E";
   let colorOutFont = "white";
   if (mode === "light") {
     colorOutBackGround = "";
@@ -184,7 +184,6 @@ function Play() {
       </Snackbar>
       {/*  */}
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 2em" }}>
-        <h2>コードを実行</h2>
         <Grid container spacing={2}>
           <Grid item xs={9}>
             <Item>
