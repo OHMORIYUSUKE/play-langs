@@ -54,12 +54,13 @@ int main(){
       <Header />
       <Grid container spacing={2} style={{ padding: "0 2em" }}>
         <Grid item xs={6}>
-          <h1>プログラミングを実行しよう！！</h1>
-          <p>様々な言語を実行することができます。</p>
-          <ToPlayBtn />
+          <h1>プログラムを実行しよう !! 🏃🏻</h1>
+          <p>様々なプログラミング言語をオンラインで実行することができます。</p>
           <h3
             style={{
               textAlign: "center",
+              marginTop: "30px",
+              marginBottom: "30px",
             }}
           >
             実行できる言語
@@ -76,6 +77,7 @@ int main(){
               </Grid>
             ))}
           </Grid>
+          <ToPlayBtn />
         </Grid>
         <Grid item xs={6}>
           <Editor
