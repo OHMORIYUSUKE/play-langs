@@ -93,16 +93,16 @@ RUN sudo chmod o+w hello.go
 RUN sudo chmod o+w input.in
 # 実行ファイル
 # C
-RUN sudo chmod o+w a.out
+RUN sudo chmod o+wx a.out
 # C++
-RUN sudo chmod o+w out
+RUN sudo chmod o+wx out
 # Go
-RUN sudo chmod o+w hello
+RUN sudo chmod o+wx hello
 # Haskell
-RUN sudo chmod o+w hello.hi
-RUN sudo chmod o+w hello.o
+RUN sudo chmod o+wx hello.hi
+RUN sudo chmod o+wx hello.o
 # Java
-RUN sudo chmod o+w hello.class
+RUN sudo chmod o+wx hello.class
 # 制限済みuser(play)になる
 USER ${USERNAME}
 # user(play)の作業ディレクトリ
