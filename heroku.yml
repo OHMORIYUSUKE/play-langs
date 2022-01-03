@@ -2,3 +2,5 @@ build:
   docker:
     frontend: ./frontend/Dockerfile
     backend: ./backend/Dockerfile
+run:
+  web: uwsgi --ini /var/www/uwsgi.ini
