@@ -103,12 +103,14 @@ RUN sudo chmod o+wx hello.hi
 RUN sudo chmod o+wx hello.o
 # Java
 RUN sudo chmod o+wx hello.class
-# 制限済みuser(play)になる
-USER ${USERNAME}
-# user(play)の作業ディレクトリ
+
+# 作業ディレクトリ
 WORKDIR /var/www/
 # uwsgiを実行するコマンド
 CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
+
+# /user/play 制限済みuser(play)になる
+USER ${USERNAME}
 
 EXPOSE 3031/tcp
 
