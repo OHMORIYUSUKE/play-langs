@@ -7,3 +7,6 @@ run:
     command:
       - uwsgi --ini /var/www/uwsgi.ini
     image: backend
+    command:
+      - sudo service nginx start
+    image: frontend

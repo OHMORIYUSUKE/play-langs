@@ -110,6 +110,7 @@ WORKDIR /var/www/
 # uwsgiを実行するコマンド
 CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
 
+EXPOSE 3031/tcp
 
 #### メモ
 # > docker compose build --build-arg PASS=何か

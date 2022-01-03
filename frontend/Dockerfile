@@ -10,3 +10,5 @@ COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 ENV TZ Asia/Tokyo
 RUN echo "${TZ}" > /etc/timezone \
    && dpkg-reconfigure -f noninteractive tzdata
+
+EXPOSE 80/tcp
