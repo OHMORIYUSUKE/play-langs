@@ -5,7 +5,10 @@ export const langs = [
   { id: "ruby", title: "Ruby" },
   { id: "haskell", title: "Haskell" },
   { id: "python", title: "Python" },
-  { id: "java", title: "Java" },
   { id: "go", title: "Go" },
+  { id: "java", title: "Java" },
   { id: "javascript", title: "JavaScript" },
+  { id: "php", title: "PHP" },
+  { id: "perl", title: "Perl" },
+  { id: "brainfuck", title: "Brainfuck" },
 ];

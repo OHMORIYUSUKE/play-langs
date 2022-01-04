@@ -13,6 +13,9 @@ import rubyImg from "../images/Ruby.jpg";
 import shellImg from "../images/shell.png";
 import cppImg from "../images/cpp_logo.png";
 import goImg from "../images/go.png";
+import phpImg from "../images/php.png";
+import perlImg from "../images/perl.png";
+import brainfuckImg from "../images/brainfuck.png";
 
 function Top() {
   const EditordefaultValue = `#include <stdio.h>
@@ -22,14 +25,17 @@ int main(){
 }`;
   const logoList = [
     { src: cImg, name: "C" },
+    { src: cppImg, name: "C++" },
     { src: haskellImg, name: "Haskell" },
     { src: javaImg, name: "Java" },
     { src: javascriptImg, name: "JavaScript" },
-    { src: cppImg, name: "C++" },
     { src: rubyImg, name: "Ruby" },
-    { src: shellImg, name: "Shell" },
     { src: pythonImg, name: "Python" },
     { src: goImg, name: "Go" },
+    { src: phpImg, name: "PHP" },
+    { src: perlImg, name: "Perl" },
+    { src: shellImg, name: "Shell" },
+    { src: brainfuckImg, name: "Brainfuck" },
   ];
   const logoStyle = {
     width: "60%",
