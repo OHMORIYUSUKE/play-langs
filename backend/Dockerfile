@@ -22,8 +22,6 @@ RUN sudo apt-get install -y -q python3
 RUN sudo apt -y -q install php php-common
 # Perlの環境構築
 RUN sudo apt-get install -y -q perl
-
-RUN sudo apt-get -y -q install hsbrainfuck
 #######################################################################
 # pip3コマンドをインストール
 RUN sudo apt install -y -q python3-pip
