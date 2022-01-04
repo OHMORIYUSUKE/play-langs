@@ -78,6 +78,12 @@ def select_lang(lang):
         langFile = "go"
     elif lang == 'javascript':
         langFile = "js"
+    elif lang == 'php':
+        langFile = "php"
+    elif lang == 'perl':
+        langFile = "pl"
+    elif lang == 'brainfuck':
+        langFile = "bf"
     return langFile
 
 if __name__ == "__main__":

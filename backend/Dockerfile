@@ -18,6 +18,12 @@ RUN sudo apt-get install -y -q nodejs
 RUN sudo apt-get install -y -q haskell-platform
 # Pythonの環境構築
 RUN sudo apt-get install -y -q python3
+# PHPの環境構築
+RUN sudo apt -y -q install php php-common
+# Perlの環境構築
+RUN sudo apt-get install -y -q perl
+
+RUN sudo apt-get -y -q install hsbrainfuck
 #######################################################################
 # pip3コマンドをインストール
 RUN sudo apt install -y -q python3-pip
@@ -79,6 +85,10 @@ RUN chmod +t javascript.sh
 RUN chmod +t python.sh
 RUN chmod +t ruby.sh
 RUN chmod +t shell.sh
+RUN chmod +t php.sh
+RUN chmod +t perl.sh
+RUN chmod +t brainfuck.sh
+RUN chmod +t run_brainfuck.py
 RUN chmod +t main.py
 # 権限付与
 RUN sudo chmod o+w hello.py
@@ -90,6 +100,9 @@ RUN sudo chmod o+w hello.cpp
 RUN sudo chmod o+w hello.hs
 RUN sudo chmod o+w hello.js
 RUN sudo chmod o+w hello.go
+RUN sudo chmod o+w hello.php
+RUN sudo chmod o+w hello.pl
+RUN sudo chmod o+w hello.bf
 RUN sudo chmod o+w input.in
 # 実行ファイル
 # C
