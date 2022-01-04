@@ -247,73 +247,82 @@ function Play() {
           </Grid>
           {/* 設定(右側) */}
           <Grid item xs={3}>
-            <Item>
-              <h4 style={{ textAlign: "center", margin: "8px" }}>設定</h4>
-              <FormControl size="small">
-                <Select
-                  value={mode}
-                  onChange={handleChangeMode}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem value="light">ライト</MenuItem>
-                  <MenuItem value="vs-dark">ダーク</MenuItem>
-                </Select>
-                <FormHelperText>エディタのテーマを選択</FormHelperText>
-              </FormControl>
-              <br />
-              <br />
-              <Divider />
-              <br />
-              <h4 style={{ textAlign: "center", margin: "8px" }}>実行</h4>
-              <FormControl size="small">
-                <Select
-                  value={lang}
-                  onChange={handleChangelang}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  {langs.map((lang) => (
-                    <MenuItem value={lang.id}>{lang.title}</MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>実行したい言語を選択</FormHelperText>
-              </FormControl>
-              {waiting ? (
-                <>
-                  <Button
-                    style={{ marginLeft: "15px" }}
-                    onClick={submit}
-                    variant="contained"
-                    disableElevation
-                    size="large"
-                    disabled
+            <div
+              style={{
+                marginBottom: "20px",
+                position: "sticky",
+                zIndex: "1",
+                top: "10px",
+              }}
+            >
+              <Item>
+                <h4 style={{ textAlign: "center", margin: "8px" }}>設定</h4>
+                <FormControl size="small">
+                  <Select
+                    value={mode}
+                    onChange={handleChangeMode}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
                   >
-                    実行中...
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    style={{ marginLeft: "15px" }}
-                    onClick={submit}
-                    variant="contained"
-                    disableElevation
-                    size="large"
+                    <MenuItem value="light">ライト</MenuItem>
+                    <MenuItem value="vs-dark">ダーク</MenuItem>
+                  </Select>
+                  <FormHelperText>エディタのテーマを選択</FormHelperText>
+                </FormControl>
+                <br />
+                <br />
+                <Divider />
+                <br />
+                <h4 style={{ textAlign: "center", margin: "8px" }}>実行</h4>
+                <FormControl size="small">
+                  <Select
+                    value={lang}
+                    onChange={handleChangelang}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
                   >
-                    実行
-                  </Button>
-                </>
-              )}
-            </Item>
-            <Item style={{ marginTop: "1rem" }}>
-              <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
-              <p>３秒以内で実行できるコードにしてください。</p>
-              <p>
-                <b>Java </b>を実行する際は、実行クラスの名前を<b> hello </b>
-                にしてください。
-              </p>
-            </Item>
+                    {langs.map((lang) => (
+                      <MenuItem value={lang.id}>{lang.title}</MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>実行したい言語を選択</FormHelperText>
+                </FormControl>
+                {waiting ? (
+                  <>
+                    <Button
+                      style={{ marginLeft: "15px" }}
+                      onClick={submit}
+                      variant="contained"
+                      disableElevation
+                      size="large"
+                      disabled
+                    >
+                      実行中...
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      style={{ marginLeft: "15px" }}
+                      onClick={submit}
+                      variant="contained"
+                      disableElevation
+                      size="large"
+                    >
+                      実行
+                    </Button>
+                  </>
+                )}
+              </Item>
+              <Item style={{ marginTop: "1rem" }}>
+                <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
+                <p>３秒以内で実行できるコードにしてください。</p>
+                <p>
+                  <b>Java </b>を実行する際は、実行クラスの名前を<b> hello </b>
+                  にしてください。
+                </p>
+              </Item>
+            </div>
           </Grid>
         </Grid>
       </Box>
