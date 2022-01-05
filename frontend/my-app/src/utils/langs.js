@@ -1,6 +1,7 @@
 export const langs = [
   { id: "c", title: "C" },
   { id: "cpp", title: "C++" },
+  { id: "csharp", title: "C#" },
   { id: "shell", title: "Shell" },
   { id: "ruby", title: "Ruby" },
   { id: "haskell", title: "Haskell" },
@@ -12,5 +13,4 @@ export const langs = [
   { id: "perl", title: "Perl" },
   { id: "brainfuck", title: "Brainfuck" },
   { id: "nadesiko3", title: "Nadesiko3" },
-  { id: "csharp", title: "C#" },
 ];

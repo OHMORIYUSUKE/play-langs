@@ -25,7 +25,7 @@ RUN sudo apt-get install -y -q perl
 # なでしこの環境構築
 RUN sudo apt-get install -y -q npm
 RUN sudo npm install -g nadesiko3
-
+# C#の環境構築
 RUN sudo apt-get install -y -q mono-complete
 #######################################################################
 # pip3コマンドをインストール

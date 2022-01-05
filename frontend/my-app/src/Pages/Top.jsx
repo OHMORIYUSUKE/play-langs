@@ -17,6 +17,7 @@ import phpImg from "../images/php.png";
 import perlImg from "../images/perl.png";
 import brainfuckImg from "../images/brainfuck.png";
 import nadesiko3Img from "../images/nadesiko3.png";
+import csharpImg from "../images/csharp.png";
 
 function Top() {
   const EditordefaultValue = `#include <stdio.h>
@@ -27,6 +28,7 @@ int main(){
   const logoList = [
     { src: cImg, name: "C" },
     { src: cppImg, name: "C++" },
+    { src: csharpImg, name: "C#" },
     { src: haskellImg, name: "Haskell" },
     { src: javaImg, name: "Java" },
     { src: javascriptImg, name: "JavaScript" },
