@@ -11,4 +11,5 @@ export const langs = [
   { id: "php", title: "PHP" },
   { id: "perl", title: "Perl" },
   { id: "brainfuck", title: "Brainfuck" },
+  { id: "nadesiko3", title: "Nadesiko3" },
 ];

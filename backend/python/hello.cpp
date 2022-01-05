@@ -1,2 +1,8 @@
-name = input("language name : \n")
-print("Hello " + name + "!!"
+#include <iostream>
+
+using namespace std;
+
+int main(){
+  cout << "hello world" << endl;
+  return 0;
+}

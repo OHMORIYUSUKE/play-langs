@@ -22,6 +22,9 @@ RUN sudo apt-get install -y -q python3
 RUN sudo apt -y -q install php php-common
 # Perlの環境構築
 RUN sudo apt-get install -y -q perl
+# なでしこの環境構築
+RUN sudo apt-get install -y -q npm
+RUN sudo npm install -g nadesiko3
 #######################################################################
 # pip3コマンドをインストール
 RUN sudo apt install -y -q python3-pip
@@ -86,6 +89,7 @@ RUN chmod +t shell.sh
 RUN chmod +t php.sh
 RUN chmod +t perl.sh
 RUN chmod +t brainfuck.sh
+RUN chmod +t nadesiko3.sh
 RUN chmod +t run_brainfuck.py
 RUN chmod +t main.py
 # 権限付与
@@ -101,6 +105,7 @@ RUN sudo chmod o+w hello.go
 RUN sudo chmod o+w hello.php
 RUN sudo chmod o+w hello.pl
 RUN sudo chmod o+w hello.bf
+RUN sudo chmod o+w hello.nako3
 RUN sudo chmod o+w input.in
 # 実行ファイル
 # C

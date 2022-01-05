@@ -1,2 +1,1 @@
-while True:
-    print(1)
+main = putStrLn "Hello World"

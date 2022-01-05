@@ -84,6 +84,8 @@ def select_lang(lang):
         langFile = "pl"
     elif lang == 'brainfuck':
         langFile = "bf"
+    elif lang == 'nadesiko3':
+        langFile = "nako3"
     return langFile
 
 if __name__ == "__main__":

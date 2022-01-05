@@ -16,6 +16,7 @@ import goImg from "../images/go.png";
 import phpImg from "../images/php.png";
 import perlImg from "../images/perl.png";
 import brainfuckImg from "../images/brainfuck.png";
+import nadesiko3Img from "../images/nadesiko3.png";
 
 function Top() {
   const EditordefaultValue = `#include <stdio.h>
@@ -36,6 +37,7 @@ int main(){
     { src: perlImg, name: "Perl" },
     { src: shellImg, name: "Shell" },
     { src: brainfuckImg, name: "Brainfuck" },
+    { src: nadesiko3Img, name: "Nadesiko3" },
   ];
   const logoStyle = {
     width: "60%",
