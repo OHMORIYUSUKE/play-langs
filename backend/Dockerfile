@@ -25,6 +25,8 @@ RUN sudo apt-get install -y -q perl
 # なでしこの環境構築
 RUN sudo apt-get install -y -q npm
 RUN sudo npm install -g nadesiko3
+
+RUN sudo apt-get install -y -q mono-complete
 #######################################################################
 # pip3コマンドをインストール
 RUN sudo apt install -y -q python3-pip
@@ -90,6 +92,7 @@ RUN chmod +t php.sh
 RUN chmod +t perl.sh
 RUN chmod +t brainfuck.sh
 RUN chmod +t nadesiko3.sh
+RUN chmod +t csharp.sh
 RUN chmod +t run_brainfuck.py
 RUN chmod +t main.py
 # 権限付与
@@ -106,6 +109,7 @@ RUN sudo chmod o+w hello.php
 RUN sudo chmod o+w hello.pl
 RUN sudo chmod o+w hello.bf
 RUN sudo chmod o+w hello.nako3
+RUN sudo chmod o+w hello.cs
 RUN sudo chmod o+w input.in
 # 実行ファイル
 # C
@@ -119,6 +123,8 @@ RUN sudo chmod o+wx hello.hi
 RUN sudo chmod o+wx hello.o
 # Java
 RUN sudo chmod o+wx hello.class
+# C#
+RUN sudo chmod o+wx hello.exe
 
 # 作業ディレクトリ
 WORKDIR /var/www/
