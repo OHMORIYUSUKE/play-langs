@@ -18,9 +18,11 @@ import perlImg from "../images/perl.png";
 import brainfuckImg from "../images/brainfuck.png";
 import nadesiko3Img from "../images/nadesiko3.png";
 import csharpImg from "../images/csharp.png";
+import wenyanImg from "../images/wenyan.png";
 
 function Top() {
   const EditordefaultValue = `#include <stdio.h>
+
 int main(){
   printf("Hello World !!");
   return 0;
@@ -40,6 +42,7 @@ int main(){
     { src: shellImg, name: "Shell" },
     { src: brainfuckImg, name: "Brainfuck" },
     { src: nadesiko3Img, name: "Nadesiko3" },
+    { src: wenyanImg, name: "Wenyan" },
   ];
   const logoStyle = {
     width: "60%",
