@@ -27,7 +27,7 @@ RUN sudo apt-get install -y -q npm
 RUN sudo npm install -g nadesiko3
 # C#の環境構築
 RUN sudo apt-get install -y -q mono-complete
-
+# wenyanの環境構築
 RUN npm install -g @wenyan/cli
 #######################################################################
 # pip3コマンドをインストール
