@@ -2,6 +2,11 @@ FROM debian:11
 
 RUN apt-get update && apt-get install -y -q sudo 
 
+###########################################################################
+WORKDIR /
+RUN sudo apt install certbot
+RUN sudo certbot certonly --webroot -w /var/www/html/ -d play-langs.f5.si
+###########################################################################
 ########################################################################3
 # Cの環境構築
 RUN sudo apt-get install -y -q gcc
