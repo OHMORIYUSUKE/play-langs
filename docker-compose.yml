@@ -23,8 +23,8 @@ services:
     # ※コンテナ内でファイルが生成された場合は、
     #   指定されているホストPCのディレクトリにもコンテナ内のファイルが生成される
     #   (ホストPCに指定されているディレクトリがない場合はディレクトリが生成される)
-    # volumes:
-    #   - ./backend/python:/var/www/
+    volumes:
+      - ./backend/python:/var/www/
 
   # フロントエンドコンテナ
   frontend:
@@ -46,3 +46,26 @@ services:
     # 時刻を設定
     environment:
       TZ: "Asia/Tokyo"
+
+  mysql:
+    build: ./mysql
+    volumes:
+      - ./mysql/save_data:/var/lib/mysql #データの永続化
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=playLangs
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_ROOT_HOST=%
+    container_name: mysql_container_play_langs
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    restart: always
+    container_name: phpmyadmin_container_play_langs
+    ports:
+      - "8080:80"

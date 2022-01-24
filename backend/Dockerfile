@@ -40,10 +40,10 @@ ENV TZ Asia/Tokyo
 
 # uwsgiでPythonのアプリケーションを配置するディレクトリ
 # https://qiita.com/11ohina017/items/da2ae5b039257752e558
-COPY ./python /var/www
+COPY ./python/lib_config /var/www
 
 # 作業ディレクトリ
-WORKDIR /var/www/
+WORKDIR /var/www
 RUN pip3 install --upgrade pip
 
 RUN pip3 install -r requirements.txt
@@ -60,6 +60,7 @@ RUN groupadd wheel
 RUN usermod -aG wheel play
 COPY ./conf/sudoers /etc/sudoers
 
+COPY ./python /var/www
 # パーミッション
 RUN chmod +t bin/
 RUN chmod +t boot/
@@ -80,7 +81,7 @@ RUN chmod +t srv/
 RUN chmod +t tmp/
 RUN chmod +t var/
 ## /var
-WORKDIR /var/www
+WORKDIR /var/www/PlayLang
 RUN chmod +t c.sh
 RUN chmod +t cpp.sh
 RUN chmod +t go.sh
@@ -97,8 +98,11 @@ RUN chmod +t nadesiko3.sh
 RUN chmod +t csharp.sh
 RUN chmod +t wenyan.sh
 RUN chmod +t run_brainfuck.py
+
+WORKDIR /var/www
 RUN chmod +t main.py
 # 権限付与
+WORKDIR /var/www/PlayLang
 RUN sudo chmod o+w hello.py
 RUN sudo chmod o+w hello.sh
 RUN sudo chmod o+w hello.java
