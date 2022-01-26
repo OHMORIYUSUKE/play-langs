@@ -78,7 +78,7 @@ if __name__ == '__main__':
           <Editor
             height="40vh"
             theme="vs-dark"
-            language="c"
+            language="python"
             defaultValue={EditordefaultValue}
             options={{ readOnly: "true" }}
           />

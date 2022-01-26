@@ -29,6 +29,15 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
+  const defaultCode = `def main():
+  string = input()
+  print('Hello ', string , ' !!')
+
+if __name__ == '__main__':
+  main()`;
+
+  const defaultInput = "Python";
+
   const [alertState, setStateAlert] = useState({
     open: false,
     text: "",
@@ -58,7 +67,7 @@ function Play() {
     editorRefIn.current = editor;
   }
   ///////////
-  const [lang, setLang] = useState("c");
+  const [lang, setLang] = useState("python");
 
   const handleChangelang = (event) => {
     setLang(event.target.value);
@@ -192,12 +201,14 @@ function Play() {
                 height="70vh"
                 theme={mode}
                 language={lang}
+                defaultValue={defaultCode}
                 onMount={handleEditorDidMount}
               />
               <h4 style={{ textAlign: "center", margin: "5px" }}>標準入力</h4>
               <Editor
                 height="30vh"
                 theme={mode}
+                defaultValue={defaultInput}
                 onMount={handleEditorDidMountIn}
               />
               <br />
