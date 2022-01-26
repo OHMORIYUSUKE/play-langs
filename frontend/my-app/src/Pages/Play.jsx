@@ -122,7 +122,7 @@ function Play() {
     setResponse({ out: "Running... 🏃🏻" });
     axios
       .post(
-        `http://${ipaddress}:3031/api/v1/play`,
+        "https://play-lang.herokuapp.com/play",
         {
           code: editorRef.current.getValue(),
           input: editorRefIn.current.getValue(),
