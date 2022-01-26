@@ -21,12 +21,11 @@ import csharpImg from "../images/csharp.png";
 import wenyanImg from "../images/wenyan.png";
 
 function Top() {
-  const EditordefaultValue = `#include <stdio.h>
+  const EditordefaultValue = `def main():
+  print('Hello World !!')
 
-int main(){
-  printf("Hello World !!");
-  return 0;
-}`;
+if __name__ == '__main__':
+  main()`;
   const logoList = [{ src: pythonImg, name: "Python" }];
   const logoStyle = {
     width: "60%",
@@ -99,7 +98,7 @@ int main(){
                 overflowWrap: "break-word",
               }}
             >
-              $ ./a.out <br />
+              $ python main.py <br />
               Hello World !!
             </code>
           </div>
