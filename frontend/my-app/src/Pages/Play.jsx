@@ -328,10 +328,7 @@ if __name__ == '__main__':
               <Item style={{ marginTop: "1rem" }}>
                 <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
                 <p>３秒以内で実行できるコードにしてください。</p>
-                <p>
-                  <b>Java </b>を実行する際は、実行クラスの名前を<b> hello </b>
-                  にしてください。
-                </p>
+                <p>※入力されたコードはPython 3.10.0で実行されます。</p>
               </Item>
             </div>
           </Grid>
