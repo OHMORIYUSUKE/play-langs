@@ -31,7 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
 function Play() {
   const defaultCode = `def main():
   string = input()
-  print('Hello ', string , ' !!')
+  print('Hello ' + string + ' !!')
 
 if __name__ == '__main__':
   main()`;
