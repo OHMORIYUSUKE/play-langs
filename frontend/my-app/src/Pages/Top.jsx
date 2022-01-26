@@ -27,23 +27,7 @@ int main(){
   printf("Hello World !!");
   return 0;
 }`;
-  const logoList = [
-    { src: cImg, name: "C" },
-    { src: cppImg, name: "C++" },
-    { src: csharpImg, name: "C#" },
-    { src: haskellImg, name: "Haskell" },
-    { src: javaImg, name: "Java" },
-    { src: javascriptImg, name: "JavaScript" },
-    { src: rubyImg, name: "Ruby" },
-    { src: pythonImg, name: "Python" },
-    { src: goImg, name: "Go" },
-    { src: phpImg, name: "PHP" },
-    { src: perlImg, name: "Perl" },
-    { src: shellImg, name: "Shell" },
-    { src: brainfuckImg, name: "Brainfuck" },
-    { src: nadesiko3Img, name: "Nadesiko3" },
-    { src: wenyanImg, name: "Wenyan" },
-  ];
+  const logoList = [{ src: pythonImg, name: "Python" }];
   const logoStyle = {
     width: "60%",
   };
@@ -68,7 +52,6 @@ int main(){
       <Grid container spacing={2} style={{ padding: "0 2em" }}>
         <Grid item xs={6}>
           <h1>プログラムを実行しよう !! 🏃🏻</h1>
-          <p>様々なプログラミング言語をオンラインで実行することができます。</p>
           <h3
             style={{
               textAlign: "center",
