@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
-import { app } from "../utils/firebase/firebase";
+import { app } from "../utils/firebase/firebaseConfig";
 
 const clickButton = () => {
   const auth = getAuth(app);

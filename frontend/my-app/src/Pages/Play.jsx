@@ -30,11 +30,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function Play() {
   const defaultCode = `def main():
-  string = input()
-  print('Hello ' + string + ' !!')
+    string = input()
+    print('Hello ' + string + ' !!')
 
 if __name__ == '__main__':
-  main()`;
+    main()`;
 
   const defaultInput = "Python";
 
@@ -131,6 +131,8 @@ if __name__ == '__main__':
     setResponse({ out: "Running... 🏃🏻" });
     axios
       .post(
+        // http://localhost:3031/api/v1/play
+        // https://play-lang.herokuapp.com/play
         "https://play-lang.herokuapp.com/play",
         {
           code: editorRef.current.getValue(),

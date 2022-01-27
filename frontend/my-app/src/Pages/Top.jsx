@@ -22,10 +22,10 @@ import wenyanImg from "../images/wenyan.png";
 
 function Top() {
   const EditordefaultValue = `def main():
-  print('Hello World !!')
+    print('Hello World !!')
 
 if __name__ == '__main__':
-  main()`;
+    main()`;
   const logoList = [{ src: pythonImg, name: "Python" }];
   const logoStyle = {
     width: "60%",
@@ -51,6 +51,7 @@ if __name__ == '__main__':
       <Grid container spacing={2} style={{ padding: "0 2em" }}>
         <Grid item xs={6}>
           <h1>プログラムを実行しよう !! 🏃🏻</h1>
+          <p>🚧 ログイン機能は実装途中です。 🚧</p>
           <h3
             style={{
               textAlign: "center",
