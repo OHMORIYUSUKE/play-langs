@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 
+import { useHistory } from "react-router-dom";
+
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 
@@ -11,6 +13,13 @@ import { firebaseConfig } from "../utils/firebase/firebaseConfig";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function FirebaseAuthGoogleButton() {
   const clickButton = () => {
@@ -85,11 +94,17 @@ function FirebaseAuthGoogleButton() {
               )
               .then((res) => {
                 console.log(res);
-                setToken(localStorage.getItem("Token"));
+                setToken(true);
                 // window.alert(JSON.stringify(res.data));
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
+                setUserInfo({
+                  user_name: localStorage.getItem("user_name"),
+                  user_picture: localStorage.getItem("user_picture"),
+                });
+                setAnchorElUser(false);
+                //Login!!
               })
               .catch((error) => {
                 console.log("Error : " + JSON.stringify(error));
@@ -106,19 +121,88 @@ function FirebaseAuthGoogleButton() {
       });
   };
 
-  const [Token, setToken] = useState("");
+  // logOut
+  function logOut() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    firebase
+      .auth()
+      .signOut()
+      .then((response) => {
+        localStorage.removeItem("Token");
+        localStorage.removeItem("user_name");
+        localStorage.removeItem("user_picture");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("refreshToken");
+        setUserInfo({
+          user_name: localStorage.getItem("user_name"),
+          user_picture: localStorage.getItem("user_picture"),
+        });
+        setToken(false);
+        window.alert("ログアウトしました。");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const TokenFlag = localStorage.getItem("Token") ? true : false;
+  const [Token, setToken] = useState(TokenFlag);
+  const [userInfo, setUserInfo] = useState({
+    user_name: localStorage.getItem("user_name"),
+    user_picture: localStorage.getItem("user_picture"),
+  });
+  const { user_name, user_picture } = userInfo;
+
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElUser(true);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   return (
     <>
       {Token ? (
-        <Tooltip title={localStorage.getItem("user_name")}>
-          <IconButton sx={{ p: 0 }}>
-            <Avatar
-              alt={localStorage.getItem("user_name")}
-              src={localStorage.getItem("user_picture")}
-            />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ flexGrow: 0 }}>
+          <Tooltip title={user_name}>
+            <IconButton sx={{ p: 0 }} onClick={handleOpenNavMenu}>
+              <Avatar alt={user_name} src={user_picture} />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuItem>
+              <Typography textAlign="center">
+                <Link href="/myPage" underline="none" color="#1A2027">
+                  🧑 マイページ
+                </Link>
+              </Typography>
+            </MenuItem>
+            <MenuItem onClick={logOut}>
+              <Typography textAlign="center" style={{ color: "red" }}>
+                🚪 ログアウト
+              </Typography>
+            </MenuItem>
+          </Menu>
+        </Box>
       ) : (
         <Button
           color="inherit"
