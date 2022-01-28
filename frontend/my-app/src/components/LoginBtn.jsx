@@ -55,6 +55,7 @@ function FirebaseAuthGoogleButton() {
       }
     })();
   }, []);
+
   const clickButton = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -224,7 +225,11 @@ function FirebaseAuthGoogleButton() {
           >
             <MenuItem>
               <Typography textAlign="center">
-                <Link href="/myPage" underline="none" color="#1A2027">
+                <Link
+                  href={`/user/${localStorage.getItem("user_id")}`}
+                  underline="none"
+                  color="#1A2027"
+                >
                   🧑 マイページ
                 </Link>
               </Typography>

@@ -21,6 +21,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 import { styled } from "@mui/material/styles";
+import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -29,6 +30,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
+  let { page_param_code_id } = useParams();
+
   const defaultCode = `def main():
     string = input()
     print('Hello ' + string + ' !!')
@@ -131,8 +134,6 @@ if __name__ == '__main__':
     setResponse({ out: "Running... 🏃🏻" });
     axios
       .post(
-        // http://localhost:3031/api/v1/play
-        // https://play-lang.herokuapp.com/play
         "https://play-lang.herokuapp.com/play",
         {
           code: editorRef.current.getValue(),
@@ -150,6 +151,36 @@ if __name__ == '__main__':
         setResponse(res.data);
         setStateRes({ waiting: false });
         setStateAlert({ open: true, text: "実行完了 🎉" });
+        // Login userかつcode Id 指定ならCodeを更新
+        if (localStorage.getItem("Token") && page_param_code_id) {
+          axios
+            .post(
+              "https://play-lang.herokuapp.com/code/update",
+              {
+                id: page_param_code_id,
+                title: "python code",
+                code: editorRef.current.getValue(),
+                input: editorRefIn.current.getValue(),
+                lang: lang,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: localStorage.getItem("Token"),
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+              if (res.data.message === "notfound") {
+                window.alert("コードがありません");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              window.alert("コードの更新に失敗");
+            });
+        }
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error));

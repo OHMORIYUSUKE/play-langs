@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import Top from "./Pages/Top";
 import NotFound from "./Pages/NotFound";
 import Play from "./Pages/Play";
-import MyPage from "./Pages/MyPage";
+import User from "./Pages/User";
+import CustomError from "./Pages/CustomError";
 
 function App() {
   const history = useHistory();
@@ -12,7 +13,13 @@ function App() {
       <Switch>
         <Route exact path="/" component={Top} />
         <Route exact path="/play" component={Play} />
-        <Route exact path="/myPage" component={MyPage} />
+        <Route exact path="/play/:page_param_code_id" render={() => <Play />} />
+        <Route exact path="/user/:page_param_user_id" render={() => <User />} />
+        <Route
+          exact
+          path="/error/:customErrorMessage"
+          render={() => <CustomError />}
+        />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
