@@ -94,7 +94,7 @@ function MyPage() {
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error));
-        window.alert("サーバーでエラーが発生しました。/create/user");
+        window.alert("サーバーでエラーが発生しました。/user/update");
       });
 
     setOpen(false);

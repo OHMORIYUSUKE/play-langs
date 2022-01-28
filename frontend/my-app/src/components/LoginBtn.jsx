@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
 
@@ -22,35 +22,43 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 function FirebaseAuthGoogleButton() {
+  //リフレッシュ
+  useEffect(() => {
+    (async () => {
+      try {
+        // リフレッシュトークン
+        const params = new URLSearchParams();
+        params.append("grant_type", "refresh_token");
+        params.append("refresh_token", localStorage.getItem("refresh_token"));
+        axios
+          .post(
+            `https://securetoken.googleapis.com/v1/token?key=${firebaseConfig.apiKey}`,
+            params,
+            {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            }
+          )
+          .then((response) => {
+            localStorage.removeItem("Token");
+            localStorage.setItem("Token", response.data.access_token);
+            localStorage.removeItem("refreshToken");
+            localStorage.setItem("refreshToken", response.data.refresh_token);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        ////////////////////////////////////////////////////////////////////
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
   const clickButton = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-
-    // リフレッシュトークン
-    const params = new URLSearchParams();
-    params.append("grant_type", "refresh_token");
-    params.append("refresh_token", localStorage.getItem("refresh_token"));
-    axios
-      .post(
-        `https://securetoken.googleapis.com/v1/token?key=${firebaseConfig.apiKey}`,
-        params,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      )
-      .then((response) => {
-        localStorage.removeItem("Token");
-        localStorage.setItem("Token", response.data.access_token);
-        localStorage.removeItem("refreshToken");
-        localStorage.setItem("refreshToken", response.data.refresh_token);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    ////////////////////////////////////////////////////////////////////
 
     // 認証処理
     // signInWithPopupメソッドを叩くと、認証用のポップアップ画面が表示される。
