@@ -99,6 +99,31 @@ function FirebaseAuthGoogleButton() {
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
+
+                // /user/createにPost
+                axios
+                  .post(
+                    "https://play-lang.herokuapp.com/user/create",
+                    {
+                      name: res.data.user_name,
+                      user_id: res.data.user_id,
+                      picture: res.data.user_picture,
+                    },
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    }
+                  )
+                  .then(function (res) {
+                    console.log(res.data);
+                  })
+                  .catch((error) => {
+                    console.log("Error : " + JSON.stringify(error));
+                    window.alert(
+                      "サーバーでエラーが発生しました。/create/user"
+                    );
+                  });
                 setUserInfo({
                   user_name: localStorage.getItem("user_name"),
                   user_picture: localStorage.getItem("user_picture"),

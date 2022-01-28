@@ -4,21 +4,7 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 
-import cImg from "../images/c.png";
-import haskellImg from "../images/haskell.png";
-import javaImg from "../images/java.png";
-import javascriptImg from "../images/javascript.png";
 import pythonImg from "../images/python.png";
-import rubyImg from "../images/Ruby.jpg";
-import shellImg from "../images/shell.png";
-import cppImg from "../images/cpp_logo.png";
-import goImg from "../images/go.png";
-import phpImg from "../images/php.png";
-import perlImg from "../images/perl.png";
-import brainfuckImg from "../images/brainfuck.png";
-import nadesiko3Img from "../images/nadesiko3.png";
-import csharpImg from "../images/csharp.png";
-import wenyanImg from "../images/wenyan.png";
 
 function Top() {
   const EditordefaultValue = `def main():
