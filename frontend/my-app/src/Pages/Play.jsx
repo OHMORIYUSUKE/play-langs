@@ -32,14 +32,30 @@ const Item = styled(Paper)(({ theme }) => ({
 function Play() {
   let { page_param_code_id } = useParams();
 
-  const defaultCode = `def main():
+  let defaultCode = `def main():
     string = input()
     print('Hello ' + string + ' !!')
 
 if __name__ == '__main__':
     main()`;
 
-  const defaultInput = "Python";
+  let defaultInput = "Python";
+
+  // 編集画面
+  if (page_param_code_id) {
+    axios
+      .get(
+        "https://play-lang.herokuapp.com/code/getCodeId/" + page_param_code_id
+      )
+      .then((res) => {
+        defaultCode = res.data.code.code_text;
+
+        defaultInput = res.data.code.input_text;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const [alertState, setStateAlert] = useState({
     open: false,

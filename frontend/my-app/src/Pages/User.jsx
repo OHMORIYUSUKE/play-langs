@@ -25,6 +25,29 @@ function User() {
   let { page_param_user_id } = useParams();
   // get Code
   const [codeData, setCodeData] = React.useState({});
+
+  // プロフィール
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // コードを作成
+  const [openCode, setOpenCode] = React.useState(false);
+
+  const handleClickOpenCode = () => {
+    setOpenCode(true);
+  };
+
+  const handleCloseCode = () => {
+    setOpenCode(false);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -34,9 +57,7 @@ function User() {
               page_param_user_id
           )
           .then((res) => {
-            console.log(res.data);
             setCodeData(res.data);
-            // window.alert(JSON.stringify(res.data));
           })
           .catch((err) => {
             console.log(err);
@@ -45,7 +66,8 @@ function User() {
         console.log(err);
       }
     })();
-  }, []);
+  }, [openCode]);
+
   //userInfo
   useEffect(() => {
     (async () => {
@@ -54,7 +76,7 @@ function User() {
           .get("https://play-lang.herokuapp.com/user/" + page_param_user_id)
           .then((res) => {
             // window.alert(JSON.stringify(res.data.user));
-            console.log(res);
+            console.log(res.data);
             if (res.data.message === "notfound") {
               history.push("/error/ユーザーが存在しません");
               return;
@@ -81,28 +103,6 @@ function User() {
     user_picture: null,
     user_id: null,
   });
-
-  // プロフィール
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // コードを作成
-  const [openCode, setOpenCode] = React.useState(false);
-
-  const handleClickOpenCode = () => {
-    setOpenCode(true);
-  };
-
-  const handleCloseCode = () => {
-    setOpenCode(false);
-  };
 
   function editProfile() {
     const inputElementURL = document.getElementById("name");
@@ -148,6 +148,14 @@ function User() {
   }
 
   // コードを作成
+  const defaultCode = `def main():
+    string = input()
+    print('Hello ' + string + ' !!')
+
+if __name__ == '__main__':
+    main()`;
+
+  const defaultInput = "Python";
   function createCode() {
     const inputElementURL = document.getElementById("codeTitle");
     const title = inputElementURL.value;
@@ -162,8 +170,8 @@ function User() {
         "https://play-lang.herokuapp.com/code/create",
         {
           title: title,
-          code: "",
-          input: "",
+          code: defaultCode,
+          input: defaultInput,
         },
         {
           headers: {
@@ -191,20 +199,6 @@ function User() {
 
   const { user_id, user_name, user_picture } = userInfo;
 
-  const posts = [
-    "111111",
-    "111111",
-    "111111",
-    "111111",
-    "111111",
-    "111111",
-    "111111",
-  ];
-  const EditordefaultValue = `def main():
-  print('Hello World !!')
-
-if __name__ == '__main__':
-  main()`;
   return (
     <>
       <Header />
@@ -317,14 +311,16 @@ if __name__ == '__main__':
           ) : (
             <>
               <Grid container spacing={2}>
-                {posts.map((data, idx) => (
+                {codeData.code?.map((data, idx) => (
                   <Grid item xs={4}>
-                    <h2>title</h2>
+                    <h2>
+                      <a href={`/play/${data.id}`}>{data.title}</a>
+                    </h2>
                     <Editor
                       height="40vh"
                       theme="vs-dark"
                       language="python"
-                      defaultValue={EditordefaultValue}
+                      defaultValue={data.code_text}
                       options={{
                         readOnly: "true",
                         minimap: {
@@ -334,7 +330,6 @@ if __name__ == '__main__':
                     />
                   </Grid>
                 ))}
-                <p>{JSON.stringify(codeData)}</p>
               </Grid>
             </>
           )}
