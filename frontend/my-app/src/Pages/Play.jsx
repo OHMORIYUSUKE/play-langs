@@ -280,7 +280,7 @@ function Play() {
                   <TextField
                     label="ファイル名"
                     id="codeTitle"
-                    defaultValue={defaultTitle}
+                    value={defaultTitle}
                     size="small"
                     fullWidth
                   />
