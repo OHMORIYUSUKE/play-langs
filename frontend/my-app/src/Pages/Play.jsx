@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 import { Divider } from "@mui/material";
 
 import Snackbar from "@mui/material/Snackbar";
@@ -42,8 +43,9 @@ function Play() {
   if __name__ == '__main__':
       main()`,
     defaultInput: "Python",
+    defaultTitle: "",
   });
-  const { defaultCode, defaultInput } = codeData;
+  const { defaultCode, defaultInput, defaultTitle, user_id } = codeData;
   useEffect(() => {
     (async () => {
       try {
@@ -60,6 +62,8 @@ function Play() {
               setCodeData({
                 defaultCode: res.data.code.code_text,
                 defaultInput: res.data.code.input_text,
+                defaultTitle: res.data.code.title,
+                user_id: res.data.code.user_id,
               });
             })
             .catch((err) => {
@@ -84,8 +88,6 @@ function Play() {
   function handleClose() {
     setStateAlert({ open: false });
   }
-  //ip
-  const ipaddress = window.location.hostname;
   //
   const [response, setResponse] = useState({
     out: "",
@@ -183,13 +185,19 @@ function Play() {
         setStateRes({ waiting: false });
         setStateAlert({ open: true, text: "実行完了 🎉" });
         // Login userかつcode Id 指定ならCodeを更新
-        if (localStorage.getItem("Token") && page_param_code_id) {
+        if (
+          localStorage.getItem("Token") &&
+          page_param_code_id &&
+          localStorage.getItem("user_id") === user_id
+        ) {
+          const inputElementURL = document.getElementById("codeTitle");
+          const title = inputElementURL.value;
           axios
             .post(
               "https://play-lang.herokuapp.com/code/update",
               {
                 id: page_param_code_id,
-                title: "python code",
+                title: title,
                 code: editorRef.current.getValue(),
                 input: editorRefIn.current.getValue(),
                 lang: lang,
@@ -215,7 +223,7 @@ function Play() {
             })
             .catch((err) => {
               console.log(err);
-              window.alert("コードの更新に失敗");
+              window.alert("コードの更新に失敗しました");
             });
         }
       })
@@ -266,6 +274,30 @@ function Play() {
         <Grid container spacing={2}>
           <Grid item xs={9}>
             <Item>
+              {page_param_code_id &&
+              localStorage.getItem("user_id") === user_id ? (
+                <>
+                  <TextField
+                    label="ファイル名"
+                    id="codeTitle"
+                    defaultValue={defaultTitle}
+                    size="small"
+                    fullWidth
+                  />
+                </>
+              ) : (
+                <>
+                  <TextField
+                    label="ファイル名"
+                    value={defaultTitle}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </>
+              )}
               <h4 style={{ textAlign: "center", margin: "5px" }}>コード</h4>
               <Editor
                 height="70vh"
