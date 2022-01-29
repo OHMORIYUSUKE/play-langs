@@ -50,12 +50,12 @@ function FirebaseAuthGoogleButton() {
             console.log(err);
             //リフレッシュできない場合
             //再ログイン
-            localStorage.removeItem("Token");
-            localStorage.removeItem("user_name");
-            localStorage.removeItem("user_picture");
-            localStorage.removeItem("user_id");
-            localStorage.removeItem("refreshToken");
-            setToken(false);
+            // localStorage.removeItem("Token");
+            // localStorage.removeItem("user_name");
+            // localStorage.removeItem("user_picture");
+            // localStorage.removeItem("user_id");
+            // localStorage.removeItem("refreshToken");
+            // setToken(false);
           });
         ////////////////////////////////////////////////////////////////////
       } catch (err) {

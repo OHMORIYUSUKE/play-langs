@@ -130,6 +130,7 @@ function User() {
         console.log(res.data);
         if (res.data.error === "TokenError") {
           window.alert("再ログインしてください。");
+          return;
         }
         localStorage.setItem("user_name", res.data.message);
         setUserInfo({
@@ -175,6 +176,7 @@ function User() {
         console.log(res.data);
         if (res.data.error === "TokenError") {
           window.alert("再ログインしてください");
+          return;
         }
         setOpenCode(false);
         window.alert("ファイルを作成しました。");
@@ -301,7 +303,8 @@ if __name__ == '__main__':
               </Button>
             </>
           )}
-          {codeData.message === "notfound" ? (
+          {codeData.message === "notfound" &&
+          localStorage.getItem("user_id") === page_param_user_id ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 50 }}>
                 <h2>
