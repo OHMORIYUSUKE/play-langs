@@ -286,15 +286,21 @@ if __name__ == '__main__':
           sx={{ flexGrow: 1 }}
           style={{ padding: "0 0em", marginTop: "1em" }}
         >
-          <Button
-            style={{ marginTop: "1.3em" }}
-            onClick={handleClickOpenCode}
-            variant="contained"
-            disableElevation
-            size="large"
-          >
-            プロジェクトを作成する
-          </Button>
+          {localStorage.getItem("user_id") !== page_param_user_id ? (
+            <></>
+          ) : (
+            <>
+              <Button
+                style={{ marginTop: "1.3em" }}
+                onClick={handleClickOpenCode}
+                variant="contained"
+                disableElevation
+                size="large"
+              >
+                プロジェクトを作成する
+              </Button>
+            </>
+          )}
           {codeData.message === "notfound" ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 50 }}>
