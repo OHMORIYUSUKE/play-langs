@@ -37,11 +37,11 @@ function Play() {
   // コードを管理
   const [codeData, setCodeData] = useState({
     defaultCode: `def main():
-      string = input()
-      print('Hello ' + string + ' !!')
+    string = input()
+    print('Hello ' + string + ' !!')
   
-  if __name__ == '__main__':
-      main()`,
+if __name__ == '__main__':
+    main()`,
     defaultInput: "Python",
     defaultTitle: "",
   });
