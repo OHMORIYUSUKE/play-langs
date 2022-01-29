@@ -32,30 +32,45 @@ const Item = styled(Paper)(({ theme }) => ({
 function Play() {
   let { page_param_code_id } = useParams();
 
-  let defaultCode = `def main():
-    string = input()
-    print('Hello ' + string + ' !!')
-
-if __name__ == '__main__':
-    main()`;
-
-  let defaultInput = "Python";
-
-  // 編集画面
-  if (page_param_code_id) {
-    axios
-      .get(
-        "https://play-lang.herokuapp.com/code/getCodeId/" + page_param_code_id
-      )
-      .then((res) => {
-        defaultCode = res.data.code.code_text;
-
-        defaultInput = res.data.code.input_text;
-      })
-      .catch((err) => {
+  //保存されたコードを取得
+  // コードを管理
+  const [codeData, setCodeData] = useState({
+    defaultCode: `def main():
+      string = input()
+      print('Hello ' + string + ' !!')
+  
+  if __name__ == '__main__':
+      main()`,
+    defaultInput: "Python",
+  });
+  const { defaultCode, defaultInput } = codeData;
+  useEffect(() => {
+    (async () => {
+      try {
+        // 編集画面
+        if (page_param_code_id !== "") {
+          // window.alert("id指定");
+          axios
+            .get(
+              "https://play-lang.herokuapp.com/code/getCodeId/" +
+                page_param_code_id
+            )
+            .then((res) => {
+              console.log(res.data.code);
+              setCodeData({
+                defaultCode: res.data.code.code_text,
+                defaultInput: res.data.code.input_text,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      } catch (err) {
         console.log(err);
-      });
-  }
+      }
+    })();
+  }, [page_param_code_id]);
 
   const [alertState, setStateAlert] = useState({
     open: false,
@@ -190,7 +205,13 @@ if __name__ == '__main__':
               console.log(res);
               if (res.data.message === "notfound") {
                 window.alert("コードがありません");
+                return;
               }
+              if (res.data.error === "TokenError") {
+                window.alert("再ログインしてください。");
+                return;
+              }
+              setStateAlert({ open: true, text: "📋 コードを保存しました" });
             })
             .catch((err) => {
               console.log(err);

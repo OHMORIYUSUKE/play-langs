@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -76,16 +77,16 @@ function User() {
           .get("https://play-lang.herokuapp.com/user/" + page_param_user_id)
           .then((res) => {
             // window.alert(JSON.stringify(res.data.user));
-            console.log(res.data);
+            console.log(res.data.user);
             if (res.data.message === "notfound") {
               history.push("/error/ユーザーが存在しません");
               return;
             }
             setUserInfo({
-              user_name: res.data.user[1],
-              user_picture: res.data.user[2],
-              user_id: res.data.user[0],
-              created_at: res.data.user[3],
+              user_name: res.data.user.name,
+              user_picture: res.data.user.picture,
+              user_id: res.data.user.id,
+              created_at: res.data.user.created_at,
             });
           })
           .catch((error) => {
@@ -149,11 +150,11 @@ function User() {
 
   // コードを作成
   const defaultCode = `def main():
-    string = input()
-    print('Hello ' + string + ' !!')
+  string = input()
+  print('Hello ' + string + ' !!')
 
 if __name__ == '__main__':
-    main()`;
+  main()`;
 
   const defaultInput = "Python";
   function createCode() {
@@ -287,7 +288,7 @@ if __name__ == '__main__':
           ) : (
             <>
               <Button
-                style={{ marginTop: "1.3em" }}
+                style={{ marginTop: "1.3em", marginBottom: "1.3em" }}
                 onClick={handleClickOpenCode}
                 variant="contained"
                 disableElevation
@@ -313,9 +314,12 @@ if __name__ == '__main__':
               <Grid container spacing={2}>
                 {codeData.code?.map((data, idx) => (
                   <Grid item xs={4}>
-                    <h2>
-                      <a href={`/play/${data.id}`}>{data.title}</a>
-                    </h2>
+                    <Link
+                      href={`/play/${data.id}`}
+                      style={{ fontSize: "large" }}
+                    >
+                      {data.title}
+                    </Link>
                     <Editor
                       height="40vh"
                       theme="vs-dark"
