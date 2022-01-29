@@ -128,6 +128,9 @@ function User() {
       )
       .then(function (res) {
         console.log(res.data);
+        if (res.data.error === "TokenError") {
+          window.alert("再ログインしてください。");
+        }
         localStorage.setItem("user_name", res.data.message);
         setUserInfo({
           user_id: localStorage.getItem("user_id"),
