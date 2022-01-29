@@ -274,8 +274,10 @@ function Play() {
         <Grid container spacing={2}>
           <Grid item xs={9}>
             <Item>
-              {page_param_code_id &&
-              localStorage.getItem("user_id") === user_id ? (
+              {!page_param_code_id ? (
+                <></>
+              ) : page_param_code_id &&
+                localStorage.getItem("user_id") === user_id ? (
                 <>
                   <TextField
                     label="ファイル名"
