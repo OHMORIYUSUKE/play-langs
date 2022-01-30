@@ -449,26 +449,28 @@ if __name__ == '__main__':
                 <p>３秒以内で実行できるコードにしてください。</p>
                 <p>※入力されたコードはPython 3.10.0で実行されます。</p>
               </Item>
-              <Item style={{ marginTop: "1rem" }}>
-                <h4 style={{ textAlign: "center", margin: "8px" }}>
-                  コードを共有
-                </h4>
-                <a
-                  class="twitter"
-                  href={`http://twitter.com/share?text=${
-                    defaultTitle + "を書きました。"
-                  }&hashtags=${"PlayLang"}&url=${
-                    "https://play-lang.netlify.app/play/" + page_param_code_id
-                  }`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
-                    alt=""
-                  />
-                </a>
-              </Item>
+              {page_param_code_id ? (
+                <Item style={{ marginTop: "1rem" }}>
+                  <h4 style={{ textAlign: "center", margin: "8px" }}>
+                    コードを共有
+                  </h4>
+                  <a
+                    class="twitter"
+                    href={`http://twitter.com/share?text=${defaultTitle}&hashtags=${"PlayLang"}&url=${
+                      "https://play-lang.netlify.app/play/" + page_param_code_id
+                    }`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
+                      alt=""
+                    />
+                  </a>
+                </Item>
+              ) : (
+                <></>
+              )}
             </div>
           </Grid>
         </Grid>
