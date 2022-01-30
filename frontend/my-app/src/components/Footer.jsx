@@ -10,7 +10,8 @@ function Footer() {
         <Container maxWidth="md">
           <Toolbar>
             <Typography variant="body1" color="inherit">
-              © 2021 Play Langs
+              &copy; {`2021 - ${new Date().getFullYear()}`} Play Langs{"　"}
+              {"version 1.0.1"}
             </Typography>
           </Toolbar>
         </Container>

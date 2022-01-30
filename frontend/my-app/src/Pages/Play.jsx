@@ -22,6 +22,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 import { styled } from "@mui/material/styles";
+
+import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -31,6 +33,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Play() {
+  let history = useHistory();
   let { page_param_code_id } = useParams();
 
   //保存されたコードを取得
@@ -58,13 +61,18 @@ if __name__ == '__main__':
                 page_param_code_id
             )
             .then((res) => {
-              console.log(res.data.code);
+              console.log(res.data);
+              if (res.data.message === "notfound") {
+                history.push("/error/指定されたプロジェクトがありません。");
+                return;
+              }
               setCodeData({
                 defaultCode: res.data.code.code_text,
                 defaultInput: res.data.code.input_text,
                 defaultTitle: res.data.code.title,
                 user_id: res.data.code.user_id,
               });
+              setTitleValue(res.data.code.title);
             })
             .catch((err) => {
               console.log(err);
@@ -238,6 +246,12 @@ if __name__ == '__main__':
         window.alert("サーバーでエラーが発生しました。");
       });
   }
+  // input Title 用
+  const [title, setTitleValue] = useState();
+
+  const handleChangeTitle = (event) => {
+    setTitleValue(event.target.value);
+  };
 
   return (
     <>
@@ -282,9 +296,10 @@ if __name__ == '__main__':
                   <TextField
                     label="ファイル名"
                     id="codeTitle"
-                    value={defaultTitle}
+                    value={title}
                     size="small"
                     fullWidth
+                    onChange={handleChangeTitle}
                   />
                 </>
               ) : (
@@ -433,6 +448,26 @@ if __name__ == '__main__':
                 <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
                 <p>３秒以内で実行できるコードにしてください。</p>
                 <p>※入力されたコードはPython 3.10.0で実行されます。</p>
+              </Item>
+              <Item style={{ marginTop: "1rem" }}>
+                <h4 style={{ textAlign: "center", margin: "8px" }}>
+                  コードを共有
+                </h4>
+                <a
+                  class="twitter"
+                  href={`http://twitter.com/share?text=${
+                    defaultTitle + "を書きました。"
+                  }&hashtags=${"PlayLang"}&url=${
+                    "https://play-lang.netlify.app/play/" + page_param_code_id
+                  }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
+                    alt=""
+                  />
+                </a>
               </Item>
             </div>
           </Grid>

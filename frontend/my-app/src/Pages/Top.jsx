@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 import pythonImg from "../images/python.png";
 
@@ -37,7 +38,14 @@ if __name__ == '__main__':
       <Grid container spacing={2} style={{ padding: "0 2em" }}>
         <Grid item xs={6}>
           <h1>プログラムを実行しよう !! 🏃🏻</h1>
-          <p>🚧 ログイン機能は実装途中です。 🚧</p>
+          <h3>ユーザー登録なしでPythonを実行できます。</h3>
+          <Box sx={{ bgcolor: "info.main", color: "error.contrastText", p: 2 }}>
+            <h3>ユーザー登録すると...</h3>
+            <ul>
+              <li>書いたコードを共有・保存できます</li>
+            </ul>
+          </Box>
+
           <h3
             style={{
               textAlign: "center",

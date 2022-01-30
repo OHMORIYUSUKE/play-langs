@@ -79,7 +79,7 @@ function User() {
             // window.alert(JSON.stringify(res.data.user));
             console.log(res.data.user);
             if (res.data.message === "notfound") {
-              history.push("/error/ユーザーが存在しません");
+              history.push("/error/ユーザーが存在しません。");
               return;
             }
             setUserInfo({
@@ -327,6 +327,7 @@ if __name__ == '__main__':
                       defaultValue={data.code_text}
                       options={{
                         readOnly: "true",
+                        lineNumbers: false,
                         minimap: {
                           enabled: false,
                         },
