@@ -39,11 +39,20 @@ if __name__ == '__main__':
         <Grid item xs={6}>
           <h1>プログラムを実行しよう !! 🏃🏻</h1>
           <h3>ユーザー登録なしでPythonを実行できます。</h3>
-          <Box sx={{ bgcolor: "info.main", color: "error.contrastText", p: 2 }}>
+          <Box
+            sx={{ bgcolor: "info.light", color: "error.contrastText", p: 2 }}
+          >
             <h3>ユーザー登録すると...</h3>
             <ul>
               <li>書いたコードを共有・保存できます</li>
             </ul>
+          </Box>
+          <Box
+            sx={{ bgcolor: "error.light", color: "error.contrastText", p: 2 }}
+          >
+            <h5>
+              仕様が変更になることがあります。また、データが消えることがあります。
+            </h5>
           </Box>
 
           <h3

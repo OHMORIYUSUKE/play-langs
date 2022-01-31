@@ -22,44 +22,28 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 function FirebaseAuthGoogleButton() {
-  //リフレッシュ
+  //ログインから1時間
   useEffect(() => {
     (async () => {
-      try {
-        // リフレッシュトークン
-        const params = new URLSearchParams();
-        params.append("grant_type", "refresh_token");
-        params.append("refresh_token", localStorage.getItem("refresh_token"));
-        axios
-          .post(
-            `https://securetoken.googleapis.com/v1/token?key=${firebaseConfig.apiKey}`,
-            params,
-            {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-            }
-          )
-          .then((response) => {
-            localStorage.removeItem("Token");
-            localStorage.setItem("Token", response.data.access_token);
-            localStorage.removeItem("refreshToken");
-            localStorage.setItem("refreshToken", response.data.refresh_token);
-          })
-          .catch((err) => {
-            console.log(err);
-            //リフレッシュできない場合
-            //再ログイン
-            // localStorage.removeItem("Token");
-            // localStorage.removeItem("user_name");
-            // localStorage.removeItem("user_picture");
-            // localStorage.removeItem("user_id");
-            // localStorage.removeItem("refreshToken");
-            // setToken(false);
-          });
-        ////////////////////////////////////////////////////////////////////
-      } catch (err) {
-        console.log(err);
+      const loginTime = new Date(localStorage.getItem("login_time"));
+      const D = new Date();
+      const y = D.getFullYear();
+      const month = D.getMonth();
+      const d = D.getDate();
+      const h = D.getHours() - 1;
+      const min = D.getMinutes();
+      const sec = D.getSeconds();
+      var nowTime = new Date(y, month, d, h, min, sec);
+      // window.alert(loginTime + "\n" + nowTime);
+      if (loginTime < nowTime) {
+        localStorage.removeItem("Token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user_name");
+        localStorage.removeItem("user_picture");
+        localStorage.removeItem("user_id");
+      } else {
+        // nothing
+        //window.alert("ログイン中");
       }
     })();
   }, []);
@@ -96,6 +80,8 @@ function FirebaseAuthGoogleButton() {
             console.log(idToken);
             //ローカルストレージにTokenを保存
             localStorage.setItem("Token", idToken);
+            // ログイン時間
+            localStorage.setItem("login_time", String(new Date()));
             axios
               .post(
                 // http://localhost:3031/api/v1/play
