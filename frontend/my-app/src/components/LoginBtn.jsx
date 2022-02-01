@@ -115,6 +115,7 @@ function FirebaseAuthGoogleButton() {
                     {
                       headers: {
                         "Content-Type": "application/json",
+                        Authorization: `${idToken}`,
                       },
                     }
                   )
@@ -163,6 +164,7 @@ function FirebaseAuthGoogleButton() {
         localStorage.removeItem("user_picture");
         localStorage.removeItem("user_id");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("login_time");
         setUserInfo({
           user_name: localStorage.getItem("user_name"),
           user_picture: localStorage.getItem("user_picture"),

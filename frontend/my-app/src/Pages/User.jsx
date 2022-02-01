@@ -30,6 +30,9 @@ function User() {
   // プロフィール
   const [open, setOpen] = React.useState(false);
 
+  //コード削除
+  const [delFlag, setDelFlag] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -67,7 +70,7 @@ function User() {
         console.log(err);
       }
     })();
-  }, [openCode]);
+  }, [openCode, delFlag]);
 
   //userInfo
   useEffect(() => {
@@ -189,6 +192,7 @@ if __name__ == '__main__':
         }
         setOpenCode(false);
         window.alert("ファイルを作成しました。");
+        history.push(`/play/${res.data.id.max}`);
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error));
@@ -196,6 +200,41 @@ if __name__ == '__main__':
       });
 
     setOpen(false);
+  }
+
+  function deleteCode(id) {
+    var result = window.confirm("コードを削除しますか？");
+
+    if (result) {
+    } else {
+      return;
+    }
+    axios
+      .post(
+        "https://play-lang.herokuapp.com/code/delete",
+        {
+          id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("Token"),
+          },
+        }
+      )
+      .then(function (res) {
+        console.log(res.data);
+        if (res.data.error === "TokenError") {
+          window.alert("再ログインしてください");
+          return;
+        }
+        window.alert("ファイルを削除しました。");
+        setDelFlag(true);
+      })
+      .catch((error) => {
+        console.log("Error : " + JSON.stringify(error));
+        window.alert("サーバーでエラーが発生しました。/code/delete");
+      });
   }
 
   const { user_id, user_name, user_picture } = userInfo;
@@ -316,10 +355,19 @@ if __name__ == '__main__':
                   <Grid item xs={4}>
                     <Link
                       href={`/play/${data.id}`}
-                      style={{ fontSize: "large" }}
+                      style={{ fontSize: "1.2rem" }}
                     >
                       {data.title}
                     </Link>
+                    <div style={{ float: "right" }}>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => deleteCode(data.id)}
+                      >
+                        削除
+                      </Button>
+                    </div>
                     <Editor
                       height="40vh"
                       theme="vs-dark"
