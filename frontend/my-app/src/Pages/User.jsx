@@ -360,17 +360,19 @@ if __name__ == '__main__':
                       {data.title}
                     </Link>
                     {localStorage.getItem("user_id") !== page_param_user_id ? (
-                      <div style={{ float: "right" }}>
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          onClick={() => deleteCode(data.id)}
-                        >
-                          削除
-                        </Button>
-                      </div>
-                    ) : (
                       <></>
+                    ) : (
+                      <>
+                        <div style={{ float: "right" }}>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => deleteCode(data.id)}
+                          >
+                            削除
+                          </Button>
+                        </div>
+                      </>
                     )}
                     <Editor
                       height="40vh"
