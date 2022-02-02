@@ -48,6 +48,27 @@ function FirebaseAuthGoogleButton() {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      axios
+        .get(
+          "https://play-lang.herokuapp.com/user/" +
+            localStorage.getItem("user_id")
+        )
+        .then((res) => {
+          localStorage.setItem("user_name", res.data.user.name);
+          localStorage.setItem("user_picture", res.data.user.picture);
+          setUserInfo({
+            user_name: res.data.user.name,
+            user_picture: res.data.user.picture,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })();
+  }, []);
+
   const clickButton = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -102,6 +123,23 @@ function FirebaseAuthGoogleButton() {
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
+                // userが存在していた場合
+                axios
+                  .get(
+                    "https://play-lang.herokuapp.com/user/" +
+                      localStorage.getItem("user_id")
+                  )
+                  .then((res) => {
+                    localStorage.setItem("user_name", res.data.user.name);
+                    localStorage.setItem("user_picture", res.data.user.picture);
+                    setUserInfo({
+                      user_name: res.data.user.name,
+                      user_picture: res.data.user.picture,
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
 
                 // /user/createにPost
                 axios
