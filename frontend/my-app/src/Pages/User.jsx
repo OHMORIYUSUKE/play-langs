@@ -116,16 +116,11 @@ function User() {
     const inputElementURL = document.getElementById("name");
     const name = inputElementURL.value;
 
-    if (name === "") {
-      window.alert("ユーザー名が入力されていません。");
-      return;
-    }
-
     axios
       .post(
         "https://play-lang.herokuapp.com/user/update",
         {
-          name: name,
+          name: name ? name : localStorage.getItem("user_name"),
           picture: imageData ? imageData : localStorage.getItem("user_picture"),
         },
         {
