@@ -437,14 +437,14 @@ if __name__ == '__main__':
         </Grid>
         <Box
           sx={{ flexGrow: 1 }}
-          style={{ padding: "0 0em", marginTop: "1em" }}
+          style={{ padding: "0 0em", marginTop: "2.3em" }}
         >
           {localStorage.getItem("user_id") !== page_param_user_id ? (
             <></>
           ) : (
             <>
               <Button
-                style={{ marginTop: "1.3em", marginBottom: "1.3em" }}
+                style={{ marginBottom: "1.3em" }}
                 onClick={handleClickOpenCode}
                 variant="contained"
                 disableElevation
