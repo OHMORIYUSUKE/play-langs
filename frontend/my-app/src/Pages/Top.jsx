@@ -67,7 +67,13 @@ if __name__ == '__main__':
       <Grid container spacing={2} style={{ padding: "0 2em" }}>
         <Grid item xs={6}>
           <h1>プログラムを実行しよう !! 🏃🏻</h1>
-          <h3>ユーザー登録なしでPythonを実行できます。</h3>
+          <h3>
+            ユーザー登録なしでPythonを実行できます。
+            <br />
+            他のユーザーが書いたコードを編集して実行することもできます。
+            <br />
+            他のユーザーのコードを編集しながら、プログラミングを学びましょう !!
+          </h3>
           {localStorage.getItem("Token") ? (
             <></>
           ) : (
