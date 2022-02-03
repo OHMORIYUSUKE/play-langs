@@ -18,6 +18,8 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { Divider } from "@mui/material";
 
+import Avatar from "@mui/material/Avatar";
+
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
@@ -462,8 +464,9 @@ if __name__ == '__main__':
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img
-                      src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
+                    <Avatar
+                      sx={{ width: 50, height: 50 }}
+                      src="https://img.icons8.com/color/240/000000/twitter-circled--v1.png"
                       alt=""
                     />
                   </a>

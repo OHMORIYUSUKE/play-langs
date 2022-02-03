@@ -14,6 +14,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
+import Avatar from "@mui/material/Avatar";
 
 import { dateTime2Tokyo } from "../utils/dateTime2Tokyo";
 
@@ -322,8 +323,9 @@ if __name__ == '__main__':
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
-                src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
+              <Avatar
+                sx={{ width: 50, height: 50 }}
+                src="https://img.icons8.com/color/240/000000/twitter-circled--v1.png"
                 alt=""
               />
             </a>
