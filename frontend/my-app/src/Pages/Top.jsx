@@ -104,7 +104,11 @@ if __name__ == '__main__':
                 xs={4}
                 style={{ textAlign: "center", verticalAlign: "middle" }}
               >
-                <img src={logo.src} alt={logo.name} style={logoStyle} />
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  style={{ width: "100px" }}
+                />
                 <p>{logo.name}</p>
               </Grid>
             ))}
@@ -123,7 +127,7 @@ if __name__ == '__main__':
               <p>Loading...</p>
             </Grid>
           ) : (
-            <Grid container spacing={2} style={{ padding: "0 3em" }}>
+            <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {userInfo?.map((user, i) => (
                 <Grid
                   item
