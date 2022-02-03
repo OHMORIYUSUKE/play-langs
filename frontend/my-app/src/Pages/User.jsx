@@ -268,7 +268,7 @@ if __name__ == '__main__':
     <>
       <Header />
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 10em" }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={2}>
             {user_picture ? (
               <img
@@ -297,7 +297,7 @@ if __name__ == '__main__':
           <Grid item xs={7}>
             <h1>{user_name}</h1>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             {localStorage.getItem("user_id") !== page_param_user_id ? (
               <></>
             ) : (
@@ -312,6 +312,21 @@ if __name__ == '__main__':
                 </Button>
               </>
             )}
+          </Grid>
+          <Grid item xs={1}>
+            <a
+              class="twitter"
+              href={`http://twitter.com/share?text=${user_name}&hashtags=${"PlayLang"}&url=${
+                "https://play-lang.netlify.app/play/" + user_id
+              }`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://img.icons8.com/color/48/000000/twitter-circled--v1.png"
+                alt=""
+              />
+            </a>
           </Grid>
           {/* ダイアログ プロフィールを編集 */}
           <Dialog open={open} onClose={handleClose}>
@@ -453,8 +468,8 @@ if __name__ == '__main__':
           ) : (
             <>
               <Grid container spacing={2}>
-                {codeData.code?.map((data, idx) => (
-                  <Grid item xs={4}>
+                {codeData.code?.map((data, i) => (
+                  <Grid item xs={4} style={{ order: -i }}>
                     <Link
                       href={`/play/${data.id}`}
                       style={{ fontSize: "1.2rem" }}

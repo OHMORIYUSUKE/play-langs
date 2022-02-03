@@ -7,7 +7,36 @@ import Box from "@mui/material/Box";
 
 import pythonImg from "../images/python.png";
 
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+
 function Top() {
+  //user情報(自分のみ)
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        axios
+          .get("https://play-lang.herokuapp.com/user/" + "all")
+          .then((res) => {
+            // window.alert(JSON.stringify(res.data.user));
+            console.log(res.data.user);
+            setUserInfo(res.data.user);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log("Error : " + JSON.stringify(error));
+            window.alert("サーバーでエラーが発生しました。");
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  const [userInfo, setUserInfo] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
   const EditordefaultValue = `def main():
     print('Hello World !!')
 
@@ -67,7 +96,8 @@ if __name__ == '__main__':
           >
             実行できる言語
           </h3>
-          <Grid container spacing={2} style={{ padding: "0 3em" }}>
+
+          <Grid container spacing={2} style={{ padding: "0 1em" }}>
             {logoList.map((logo) => (
               <Grid
                 item
@@ -79,6 +109,53 @@ if __name__ == '__main__':
               </Grid>
             ))}
           </Grid>
+          <h3
+            style={{
+              textAlign: "center",
+              marginTop: "30px",
+              marginBottom: "30px",
+            }}
+          >
+            ユーザー
+          </h3>
+          {isLoading ? (
+            <Grid container spacing={2} style={{ padding: "0 1em" }}>
+              <p>Loading...</p>
+            </Grid>
+          ) : (
+            <Grid container spacing={2} style={{ padding: "0 3em" }}>
+              {userInfo?.map((user, i) => (
+                <Grid
+                  item
+                  xs={4}
+                  style={{
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    order: -i,
+                  }}
+                >
+                  <a
+                    href={`/user/${user.id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div>
+                      <img
+                        src={user.picture}
+                        alt={user.name}
+                        style={{
+                          borderRadius: "50%",
+                          height: "100px",
+                          objectFit: "cover",
+                          width: "100px",
+                        }}
+                      />
+                      <p style={{ color: "black" }}>{user.name}</p>
+                    </div>
+                  </a>
+                </Grid>
+              ))}
+            </Grid>
+          )}
           <ToPlayBtn />
         </Grid>
         <Grid item xs={6}>
