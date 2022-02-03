@@ -317,7 +317,7 @@ if __name__ == '__main__':
             <a
               class="twitter"
               href={`http://twitter.com/share?text=${user_name}&hashtags=${"PlayLang"}&url=${
-                "https://play-lang.netlify.app/play/" + user_id
+                "https://play-lang.netlify.app/user/" + user_id
               }`}
               target="_blank"
               rel="noopener noreferrer"
