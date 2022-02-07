@@ -9,8 +9,11 @@ import pythonImg from "../images/python.png";
 
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../store/Auth/auth";
 
 function Top() {
+  const [auth, setAuth] = useRecoilState(authState);
   //user情報(自分のみ)
   useEffect(() => {
     (async () => {
@@ -43,9 +46,7 @@ function Top() {
 if __name__ == '__main__':
     main()`;
   const logoList = [{ src: pythonImg, name: "Python" }];
-  const logoStyle = {
-    width: "60%",
-  };
+
   const ToPlayBtn = () => {
     return (
       <div
@@ -80,7 +81,7 @@ if __name__ == '__main__':
           <h2 style={{ fontWeight: "bolder" }}>
             他のユーザーのコードを編集しながら、プログラミングを学びましょう 🎉
           </h2>
-          {localStorage.getItem("Token") ? (
+          {auth.Token ? (
             <></>
           ) : (
             <>
