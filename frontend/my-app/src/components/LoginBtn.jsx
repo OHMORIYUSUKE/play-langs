@@ -21,10 +21,24 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../store/Auth/auth";
+
 function FirebaseAuthGoogleButton() {
+  const [auth, setAuth] = useRecoilState(authState);
   //ログインから1時間
   useEffect(() => {
     (async () => {
+      //
+      setAuth({
+        Token: localStorage.getItem("Token"),
+        refreshToken: localStorage.getItem("refreshToken"),
+        name: localStorage.getItem("user_name"),
+        picrure: localStorage.getItem("user_picture"),
+        id: localStorage.getItem("user_id"),
+        login_time: localStorage.getItem("login_time"),
+      });
+      //
       const loginTime = new Date(localStorage.getItem("login_time"));
       const D = new Date();
       const y = D.getFullYear();
@@ -41,6 +55,14 @@ function FirebaseAuthGoogleButton() {
         localStorage.removeItem("user_name");
         localStorage.removeItem("user_picture");
         localStorage.removeItem("user_id");
+        setAuth({
+          Token: "",
+          refreshToken: "",
+          name: "",
+          picrure: "",
+          id: "",
+          login_time: "",
+        });
       } else {
         // nothing
         //window.alert("ログイン中");
@@ -58,10 +80,6 @@ function FirebaseAuthGoogleButton() {
         .then((res) => {
           localStorage.setItem("user_name", res.data.user.name);
           localStorage.setItem("user_picture", res.data.user.picture);
-          setUserInfo({
-            user_name: res.data.user.name,
-            user_picture: res.data.user.picture,
-          });
         })
         .catch((err) => {
           console.log(err);
@@ -73,6 +91,15 @@ function FirebaseAuthGoogleButton() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
+    //ユーザー情報変数
+    // DB情報
+    let tmp_id = "";
+    let tmp_name = "";
+    let tmp_picrure = "";
+    // 認証情報
+    let tmp_Token = "";
+    let tmp_login_time = "";
+    let tmp_refreshToken = "";
 
     // 認証処理
     // signInWithPopupメソッドを叩くと、認証用のポップアップ画面が表示される。
@@ -91,6 +118,7 @@ function FirebaseAuthGoogleButton() {
         const refreshToken = user.refreshToken;
         // ローカルストレージにrefreshTokenを保存
         localStorage.setItem("refreshToken", refreshToken);
+        tmp_refreshToken = refreshToken;
 
         firebase
           .auth()
@@ -101,12 +129,12 @@ function FirebaseAuthGoogleButton() {
             console.log(idToken);
             //ローカルストレージにTokenを保存
             localStorage.setItem("Token", idToken);
+            tmp_Token = idToken;
             // ログイン時間
             localStorage.setItem("login_time", String(new Date()));
+            tmp_login_time = String(new Date());
             axios
               .post(
-                // http://localhost:3031/api/v1/play
-                // https://play-lang.herokuapp.com/play
                 "https://play-lang.herokuapp.com/login",
                 {},
                 {
@@ -118,29 +146,14 @@ function FirebaseAuthGoogleButton() {
               )
               .then((res) => {
                 console.log(res);
-                setToken(true);
                 // window.alert(JSON.stringify(res.data));
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
-                // userが存在していた場合
-                axios
-                  .get(
-                    "https://play-lang.herokuapp.com/user/" +
-                      localStorage.getItem("user_id")
-                  )
-                  .then((res) => {
-                    localStorage.setItem("user_name", res.data.user.name);
-                    localStorage.setItem("user_picture", res.data.user.picture);
-                    setUserInfo({
-                      user_name: res.data.user.name,
-                      user_picture: res.data.user.picture,
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-
+                //
+                tmp_name = res.data.user_name;
+                tmp_picrure = res.data.user_picture;
+                tmp_id = res.data.user_id;
                 // /user/createにPost
                 axios
                   .post(
@@ -159,6 +172,46 @@ function FirebaseAuthGoogleButton() {
                   )
                   .then(function (res) {
                     console.log(res.data);
+                    // userが存在していた場合
+                    if (res.data.message === "already user exist") {
+                      axios
+                        .get(
+                          "https://play-lang.herokuapp.com/user/" +
+                            localStorage.getItem("user_id")
+                        )
+                        .then((res) => {
+                          localStorage.setItem("user_name", res.data.user.name);
+                          localStorage.setItem(
+                            "user_picture",
+                            res.data.user.picture
+                          );
+                          //
+                          tmp_name = res.data.user.name;
+                          tmp_picrure = res.data.user.picture;
+                          tmp_id = res.data.user.id;
+                          setAuth({
+                            Token: tmp_Token,
+                            refreshToken: tmp_refreshToken,
+                            name: tmp_name,
+                            picrure: tmp_picrure,
+                            id: tmp_id,
+                            login_time: tmp_login_time,
+                          });
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    } else {
+                      //ユーザーが存在していなかった場合
+                      setAuth({
+                        Token: tmp_Token,
+                        refreshToken: tmp_refreshToken,
+                        name: tmp_name,
+                        picrure: tmp_picrure,
+                        id: tmp_id,
+                        login_time: tmp_login_time,
+                      });
+                    }
                   })
                   .catch((error) => {
                     console.log("Error : " + JSON.stringify(error));
@@ -166,12 +219,16 @@ function FirebaseAuthGoogleButton() {
                       "サーバーでエラーが発生しました。/create/user"
                     );
                   });
-                setUserInfo({
-                  user_name: localStorage.getItem("user_name"),
-                  user_picture: localStorage.getItem("user_picture"),
-                });
                 setAnchorElUser(false);
                 //Login!!
+                // setAuth({
+                //   Token: tmp_Token,
+                //   refreshToken: tmp_refreshToken,
+                //   name: tmp_name,
+                //   picrure: tmp_picrure,
+                //   id: tmp_id,
+                //   login_time: tmp_login_time,
+                // });
               })
               .catch((error) => {
                 console.log("Error : " + JSON.stringify(error));
@@ -203,25 +260,20 @@ function FirebaseAuthGoogleButton() {
         localStorage.removeItem("user_id");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("login_time");
-        setUserInfo({
-          user_name: localStorage.getItem("user_name"),
-          user_picture: localStorage.getItem("user_picture"),
+        setAuth({
+          Token: "",
+          refreshToken: "",
+          name: "",
+          picrure: "",
+          id: "",
+          login_time: "",
         });
-        setToken(false);
         window.alert("ログアウトしました。");
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
-  const TokenFlag = localStorage.getItem("Token") ? true : false;
-  const [Token, setToken] = useState(TokenFlag);
-  const [userInfo, setUserInfo] = useState({
-    user_name: localStorage.getItem("user_name"),
-    user_picture: localStorage.getItem("user_picture"),
-  });
-  const { user_name, user_picture } = userInfo;
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -234,11 +286,11 @@ function FirebaseAuthGoogleButton() {
 
   return (
     <>
-      {Token ? (
+      {auth.Token ? (
         <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title={user_name}>
+          <Tooltip title={auth.name}>
             <IconButton sx={{ p: 0 }} onClick={handleOpenNavMenu}>
-              <Avatar alt={user_name} src={user_picture} />
+              <Avatar alt={auth.name} src={auth.picrure} />
             </IconButton>
           </Tooltip>
           <Menu
@@ -260,7 +312,7 @@ function FirebaseAuthGoogleButton() {
             <MenuItem>
               <Typography textAlign="center">
                 <Link
-                  href={`/user/${localStorage.getItem("user_id")}`}
+                  href={`/user/${auth.id}`}
                   underline="none"
                   color="#1A2027"
                 >

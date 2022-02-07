@@ -28,6 +28,9 @@ import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../store/Auth/auth";
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -37,6 +40,8 @@ const Item = styled(Paper)(({ theme }) => ({
 function Play() {
   let history = useHistory();
   let { page_param_code_id } = useParams();
+
+  const [auth, setAuth] = useRecoilState(authState);
 
   //保存されたコードを取得
   // コードを管理
@@ -195,11 +200,7 @@ if __name__ == '__main__':
         setStateRes({ waiting: false });
         setStateAlert({ open: true, text: "実行完了 🎉" });
         // Login userかつcode Id 指定ならCodeを更新
-        if (
-          localStorage.getItem("Token") &&
-          page_param_code_id &&
-          localStorage.getItem("user_id") === user_id
-        ) {
+        if (auth.Token && page_param_code_id && auth.id === user_id) {
           const inputElementURL = document.getElementById("codeTitle");
           const title = inputElementURL.value;
           axios
@@ -292,8 +293,7 @@ if __name__ == '__main__':
             <Item>
               {!page_param_code_id ? (
                 <></>
-              ) : page_param_code_id &&
-                localStorage.getItem("user_id") === user_id ? (
+              ) : page_param_code_id && auth.id === user_id ? (
                 <>
                   <TextField
                     label="ファイル名"

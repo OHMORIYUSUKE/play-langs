@@ -26,9 +26,15 @@ import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 import loadingImage from "../images/Spinner-2.gif";
 
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../store/Auth/auth";
+
 function User() {
   let history = useHistory();
   let { page_param_user_id } = useParams();
+
+  //
+  const [auth, setAuth] = useRecoilState(authState);
   // get Code
   const [codeData, setCodeData] = React.useState({});
 
@@ -299,7 +305,7 @@ if __name__ == '__main__':
             <h1>{user_name}</h1>
           </Grid>
           <Grid item xs={2}>
-            {localStorage.getItem("user_id") !== page_param_user_id ? (
+            {auth.id !== page_param_user_id ? (
               <></>
             ) : (
               <>
@@ -441,7 +447,7 @@ if __name__ == '__main__':
           sx={{ flexGrow: 1 }}
           style={{ padding: "0 0em", marginTop: "2.3em" }}
         >
-          {localStorage.getItem("user_id") !== page_param_user_id ? (
+          {auth.id !== page_param_user_id ? (
             <></>
           ) : (
             <>
@@ -456,8 +462,7 @@ if __name__ == '__main__':
               </Button>
             </>
           )}
-          {codeData.message === "notfound" &&
-          localStorage.getItem("user_id") === page_param_user_id ? (
+          {codeData.message === "notfound" && auth.id === page_param_user_id ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 50 }}>
                 <h2>
@@ -478,7 +483,7 @@ if __name__ == '__main__':
                     >
                       {data.title}
                     </Link>
-                    {localStorage.getItem("user_id") !== page_param_user_id ? (
+                    {auth.id !== page_param_user_id ? (
                       <></>
                     ) : (
                       <>
