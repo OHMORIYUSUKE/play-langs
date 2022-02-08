@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 
 import pythonImg from "../images/python.png";
 
@@ -137,7 +138,31 @@ if __name__ == '__main__':
           </h3>
           {isLoading ? (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
-              <p>Loading...</p>
+              {[...Array(3)].map((_, i) => (
+                <Grid
+                  item
+                  xs={4}
+                  style={{
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  <Skeleton
+                    variant="circular"
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                    }}
+                  />
+                  <Skeleton
+                    variant="text"
+                    style={{
+                      width: "80%",
+                      marginTop: "10px",
+                    }}
+                  />
+                </Grid>
+              ))}
             </Grid>
           ) : (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>

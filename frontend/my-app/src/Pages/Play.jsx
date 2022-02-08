@@ -18,6 +18,9 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { Divider } from "@mui/material";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 import Avatar from "@mui/material/Avatar";
 
 import Snackbar from "@mui/material/Snackbar";
@@ -384,16 +387,14 @@ if __name__ == '__main__':
                 </FormControl>
                 {waiting ? (
                   <>
-                    <Button
-                      style={{ marginLeft: "15px" }}
-                      onClick={submit}
-                      variant="contained"
-                      disableElevation
+                    <LoadingButton
+                      loading
+                      variant="outlined"
                       size="large"
-                      disabled
+                      style={{ marginLeft: "15px" }}
                     >
                       実行中...
-                    </Button>
+                    </LoadingButton>
                   </>
                 ) : (
                   <>

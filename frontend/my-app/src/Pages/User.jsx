@@ -15,6 +15,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
 
 import { dateTime2Tokyo } from "../utils/dateTime2Tokyo";
 
@@ -28,6 +29,8 @@ import loadingImage from "../images/Spinner-2.gif";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
+
+import Skeleton from "@mui/material/Skeleton";
 
 function User() {
   let history = useHistory();
@@ -150,8 +153,8 @@ function User() {
         localStorage.setItem("user_name", res.data.message);
         setUserInfo({
           user_id: localStorage.getItem("user_id"),
-          user_name: localStorage.getItem("user_name"),
-          user_picture: localStorage.getItem("user_picture"),
+          user_name: name,
+          user_picture: imageData,
         });
       })
       .catch((error) => {
@@ -289,20 +292,20 @@ if __name__ == '__main__':
                 }}
               />
             ) : (
-              <img
-                src={loadingImage}
-                alt="プロフィール画像"
-                style={{
-                  borderRadius: "50%",
-                  width: "60px",
-                  height: "60px",
-                  objectFit: "cover",
-                }}
+              <Skeleton
+                variant="circular"
+                style={{ width: "110px", height: "110px" }}
               />
             )}
           </Grid>
           <Grid item xs={7}>
-            <h1>{user_name}</h1>
+            {user_picture ? (
+              <h1>{user_name}</h1>
+            ) : (
+              <Typography variant="h2" style={{ width: "80%" }}>
+                <Skeleton />
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={2}>
             {auth.id !== page_param_user_id ? (

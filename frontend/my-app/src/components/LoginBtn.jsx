@@ -20,12 +20,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 
 function FirebaseAuthGoogleButton() {
   const [auth, setAuth] = useRecoilState(authState);
+
+  const [isLoading, setLoading] = useState(false);
   //ログインから1時間
   useEffect(() => {
     (async () => {
@@ -64,7 +68,8 @@ function FirebaseAuthGoogleButton() {
           login_time: "",
         });
       } else {
-        // do nothing
+        // nothing
+        //window.alert("ログイン中");
       }
     })();
   }, []);
@@ -87,9 +92,20 @@ function FirebaseAuthGoogleButton() {
   }, []);
 
   const clickButton = () => {
+    setLoading(true);
+
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
+    //ユーザー情報変数
+    // DB情報
+    let tmp_id = "";
+    let tmp_name = "";
+    let tmp_picrure = "";
+    // 認証情報
+    let tmp_Token = "";
+    let tmp_login_time = "";
+    let tmp_refreshToken = "";
 
     // 認証処理
     // signInWithPopupメソッドを叩くと、認証用のポップアップ画面が表示される。
@@ -108,6 +124,7 @@ function FirebaseAuthGoogleButton() {
         const refreshToken = user.refreshToken;
         // ローカルストレージにrefreshTokenを保存
         localStorage.setItem("refreshToken", refreshToken);
+        tmp_refreshToken = refreshToken;
 
         firebase
           .auth()
@@ -118,8 +135,10 @@ function FirebaseAuthGoogleButton() {
             console.log(idToken);
             //ローカルストレージにTokenを保存
             localStorage.setItem("Token", idToken);
+            tmp_Token = idToken;
             // ログイン時間
             localStorage.setItem("login_time", String(new Date()));
+            tmp_login_time = String(new Date());
             axios
               .post(
                 "https://play-lang.herokuapp.com/login",
@@ -137,6 +156,10 @@ function FirebaseAuthGoogleButton() {
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
+                //
+                tmp_name = res.data.user_name;
+                tmp_picrure = res.data.user_picture;
+                tmp_id = res.data.user_id;
                 // /user/createにPost
                 axios
                   .post(
@@ -168,14 +191,19 @@ function FirebaseAuthGoogleButton() {
                             "user_picture",
                             res.data.user.picture
                           );
+                          //
+                          tmp_name = res.data.user.name;
+                          tmp_picrure = res.data.user.picture;
+                          tmp_id = res.data.user.id;
                           setAuth({
-                            Token: localStorage.getItem("Token"),
-                            name: localStorage.getItem("user_name"),
-                            picture: localStorage.getItem("user_picture"),
-                            id: localStorage.getItem("user_id"),
-                            refreshToken: localStorage.getItem("refreshToken"),
-                            login_time: localStorage.getItem("login_time"),
+                            Token: tmp_Token,
+                            refreshToken: tmp_refreshToken,
+                            name: tmp_name,
+                            picrure: tmp_picrure,
+                            id: tmp_id,
+                            login_time: tmp_login_time,
                           });
+                          setLoading(false);
                         })
                         .catch((err) => {
                           console.log(err);
@@ -183,13 +211,14 @@ function FirebaseAuthGoogleButton() {
                     } else {
                       //ユーザーが存在していなかった場合
                       setAuth({
-                        Token: localStorage.getItem("Token"),
-                        name: localStorage.getItem("user_name"),
-                        picture: localStorage.getItem("user_picture"),
-                        id: localStorage.getItem("user_id"),
-                        refreshToken: localStorage.getItem("refreshToken"),
-                        login_time: localStorage.getItem("login_time"),
+                        Token: tmp_Token,
+                        refreshToken: tmp_refreshToken,
+                        name: tmp_name,
+                        picrure: tmp_picrure,
+                        id: tmp_id,
+                        login_time: tmp_login_time,
                       });
+                      setLoading(false);
                     }
                   })
                   .catch((error) => {
@@ -209,6 +238,7 @@ function FirebaseAuthGoogleButton() {
           .catch(function (error) {
             window.alert("error can not get current user:" + error);
           });
+        // ...
       })
       .catch((error) => {
         console.log(error);
@@ -256,55 +286,70 @@ function FirebaseAuthGoogleButton() {
 
   return (
     <>
-      {auth.Token ? (
-        <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title={auth.name}>
-            <IconButton sx={{ p: 0 }} onClick={handleOpenNavMenu}>
-              <Avatar alt={auth.name} src={auth.picrure} />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: "45px" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
+      {isLoading ? (
+        <>
+          <LoadingButton
+            loading
+            variant="outlined"
+            size="large"
+            style={{ marginLeft: "15px" }}
           >
-            <MenuItem>
-              <Typography textAlign="center">
-                <Link
-                  href={`/user/${auth.id}`}
-                  underline="none"
-                  color="#1A2027"
-                >
-                  🧑 マイページ
-                </Link>
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={logOut}>
-              <Typography textAlign="center" style={{ color: "red" }}>
-                🚪 ログアウト
-              </Typography>
-            </MenuItem>
-          </Menu>
-        </Box>
+            実行中...
+          </LoadingButton>
+        </>
       ) : (
-        <Button
-          color="inherit"
-          onClick={clickButton}
-          style={{ textTransform: "none" }}
-        >
-          Googleアカウントでログイン
-        </Button>
+        <>
+          {auth.Token ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title={auth.name}>
+                <IconButton sx={{ p: 0 }} onClick={handleOpenNavMenu}>
+                  <Avatar alt={auth.name} src={auth.picrure} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem>
+                  <Typography textAlign="center">
+                    <Link
+                      href={`/user/${auth.id}`}
+                      underline="none"
+                      color="#1A2027"
+                    >
+                      🧑 マイページ
+                    </Link>
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={logOut}>
+                  <Typography textAlign="center" style={{ color: "red" }}>
+                    🚪 ログアウト
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <Button
+              color="inherit"
+              onClick={clickButton}
+              style={{ textTransform: "none" }}
+            >
+              Googleアカウントでログイン
+            </Button>
+          )}
+        </>
       )}
     </>
   );
