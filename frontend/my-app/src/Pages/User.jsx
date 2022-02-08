@@ -32,6 +32,9 @@ import { authState } from "../store/Auth/auth";
 
 import Skeleton from "@mui/material/Skeleton";
 
+import EditUserProfileDialog from "../components/EditUserProfileDialog";
+import CreateCodeDialog from "../components/CreateCodeDialog";
+
 function User() {
   let history = useHistory();
   let { page_param_user_id } = useParams();
@@ -41,30 +44,8 @@ function User() {
   // get Code
   const [codeData, setCodeData] = React.useState({});
 
-  // プロフィール
-  const [open, setOpen] = React.useState(false);
-
   //コード削除
   const [delFlag, setDelFlag] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // コードを作成
-  const [openCode, setOpenCode] = React.useState(false);
-
-  const handleClickOpenCode = () => {
-    setOpenCode(true);
-  };
-
-  const handleCloseCode = () => {
-    setOpenCode(false);
-  };
 
   useEffect(() => {
     (async () => {
@@ -84,7 +65,7 @@ function User() {
         console.log(err);
       }
     })();
-  }, [openCode, delFlag]);
+  }, [delFlag]);
 
   //userInfo
   useEffect(() => {
@@ -122,100 +103,6 @@ function User() {
     user_id: null,
   });
 
-  function editProfile() {
-    const inputElementURL = document.getElementById("name");
-    const name = inputElementURL.value;
-
-    axios
-      .post(
-        "https://play-lang.herokuapp.com/user/update",
-        {
-          name: name ? name : localStorage.getItem("user_name"),
-          picture: imageData ? imageData : localStorage.getItem("user_picture"),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("Token"),
-          },
-        }
-      )
-      .then(function (res) {
-        console.log(res.data);
-        if (res.data.error === "TokenError") {
-          window.alert("再ログインしてください。");
-          return;
-        }
-        localStorage.setItem(
-          "user_picture",
-          imageData ? imageData : localStorage.getItem("user_picture")
-        );
-        localStorage.setItem("user_name", res.data.message);
-        setUserInfo({
-          user_id: localStorage.getItem("user_id"),
-          user_name: name,
-          user_picture: imageData,
-        });
-      })
-      .catch((error) => {
-        console.log("Error : " + JSON.stringify(error));
-        window.alert("サーバーでエラーが発生しました。/user/update");
-      });
-
-    setOpen(false);
-  }
-
-  // コードを作成
-  const defaultCode = `def main():
-  string = input()
-  print('Hello ' + string + ' !!')
-
-if __name__ == '__main__':
-  main()`;
-
-  const defaultInput = "Python";
-  function createCode() {
-    const inputElementURL = document.getElementById("codeTitle");
-    const title = inputElementURL.value;
-
-    if (title === "") {
-      window.alert("タイトルが入力されていません。");
-      return;
-    }
-
-    axios
-      .post(
-        "https://play-lang.herokuapp.com/code/create",
-        {
-          title: title,
-          code: defaultCode,
-          input: defaultInput,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("Token"),
-          },
-        }
-      )
-      .then(function (res) {
-        console.log(res.data);
-        if (res.data.error === "TokenError") {
-          window.alert("再ログインしてください");
-          return;
-        }
-        setOpenCode(false);
-        window.alert("ファイルを作成しました。");
-        history.push(`/play/${res.data.id.max}`);
-      })
-      .catch((error) => {
-        console.log("Error : " + JSON.stringify(error));
-        window.alert("サーバーでエラーが発生しました。/code/create");
-      });
-
-    setOpen(false);
-  }
-
   function deleteCode(id) {
     var result = window.confirm("コードを削除しますか？");
 
@@ -252,27 +139,6 @@ if __name__ == '__main__':
   }
 
   const { user_id, user_name, user_picture } = userInfo;
-
-  //base64
-  const [imageData, setImageData] = React.useState(null);
-  function onFileChange(e) {
-    const files = e.target.files;
-
-    if (files.length > 0) {
-      var file = files[0];
-      var reader = new FileReader();
-      reader.onload = (e) => {
-        setImageData(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImageData(null);
-    }
-  }
-
-  function resetInput() {
-    setImageData(null);
-  }
 
   return (
     <>
@@ -312,14 +178,7 @@ if __name__ == '__main__':
               <></>
             ) : (
               <>
-                <Button
-                  onClick={handleClickOpen}
-                  variant="contained"
-                  disableElevation
-                  size="large"
-                >
-                  編集
-                </Button>
+                <EditUserProfileDialog />
               </>
             )}
           </Grid>
@@ -339,112 +198,6 @@ if __name__ == '__main__':
               />
             </a>
           </Grid>
-          {/* ダイアログ プロフィールを編集 */}
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>ユーザー情報を入力</DialogTitle>
-            <DialogContent>
-              <DialogContent>
-                このWEBサイトで使用されるアカウント情報を編集できます。
-              </DialogContent>
-              <DialogContentText>
-                アカウント名を変更できます。
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="名前"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-              <div style={{ marginTop: "20px" }}>
-                <DialogContentText>
-                  アイコン画像を変更できます。
-                </DialogContentText>
-                <div style={{ marginTop: "10px", marginBottom: "10px" }}>
-                  <FormControl>
-                    <Button
-                      component="label"
-                      size="small"
-                      variant="contained"
-                      disableElevation
-                    >
-                      ファイル選択する
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          onFileChange(e);
-                        }}
-                        style={{
-                          opacity: "0",
-                          appearance: "none",
-                          position: "absolute",
-                        }}
-                      />
-                    </Button>
-                    <FormHelperText>
-                      {imageData
-                        ? "以下の画像が選択されています"
-                        : "画像が選択されていません"}
-                    </FormHelperText>
-                  </FormControl>
-                  <Button
-                    type="button"
-                    size="small"
-                    onClick={resetInput}
-                    style={{ marginLeft: "10px" }}
-                  >
-                    リセットする
-                  </Button>
-                </div>
-                {imageData ? (
-                  <img
-                    src={imageData}
-                    alt="画像"
-                    style={{ width: "100%", border: "5px solid #1976D2" }}
-                  />
-                ) : (
-                  <></>
-                )}
-              </div>
-              {/*  */}
-            </DialogContent>
-            <DialogActions>
-              <Button style={{ color: "red" }} onClick={handleClose}>
-                閉じる
-              </Button>
-              <Button onClick={editProfile}>更新</Button>
-            </DialogActions>
-          </Dialog>
-          {/* --ダイアログ-- */}
-
-          {/* ダイアログ コードを作成 */}
-          <Dialog open={openCode} onClose={handleCloseCode}>
-            <DialogTitle>ファイル名を入力</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                コードを入力するファイルを作成しましょう。ファイル名前を入力してください。
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="codeTitle"
-                label="ファイル名"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button style={{ color: "red" }} onClick={handleCloseCode}>
-                閉じる
-              </Button>
-              <Button onClick={createCode}>作成</Button>
-            </DialogActions>
-          </Dialog>
-          {/* --ダイアログ-- */}
         </Grid>
         <Box
           sx={{ flexGrow: 1 }}
@@ -454,15 +207,7 @@ if __name__ == '__main__':
             <></>
           ) : (
             <>
-              <Button
-                style={{ marginBottom: "1.3em" }}
-                onClick={handleClickOpenCode}
-                variant="contained"
-                disableElevation
-                size="large"
-              >
-                プロジェクトを作成する
-              </Button>
+              <CreateCodeDialog />
             </>
           )}
           {codeData.message === "notfound" && auth.id === page_param_user_id ? (
