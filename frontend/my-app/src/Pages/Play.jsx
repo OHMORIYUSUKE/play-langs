@@ -31,6 +31,10 @@ import { BrowserRouter as Router, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 
+import MySnackbar from "../components/MySnackbar";
+
+import { SnackbarState } from "../store/PlayPage/Snackbar";
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -42,6 +46,7 @@ function Play() {
   let { page_param_code_id } = useParams();
 
   const [auth, setAuth] = useRecoilState(authState);
+  const [SnackbarData, setSnackbar] = useRecoilState(SnackbarState);
 
   //保存されたコードを取得
   // コードを管理
@@ -89,21 +94,13 @@ if __name__ == '__main__':
         console.log(err);
       }
     })();
-  }, [page_param_code_id]);
+  }, []);
 
-  const [alertState, setStateAlert] = useState({
-    open: false,
-    text: "",
-  });
   const [resState, setStateRes] = useState({
     waiting: false,
   });
   const { waiting } = resState;
-  const { open, text } = alertState;
-  function handleClose() {
-    setStateAlert({ open: false });
-  }
-  //
+
   const [response, setResponse] = useState({
     out: "",
     err: "",
@@ -167,7 +164,7 @@ if __name__ == '__main__':
     try {
       copyToClipboard(copyText);
       //window.alert("コピーしました。");
-      setStateAlert({ open: true, text: "コピーしました ❕" });
+      setSnackbar({ isOpen: true, text: "コピーしました !", color: "success" });
     } catch (error) {
       window.alert("コピーできませんでした。");
     }
@@ -179,6 +176,7 @@ if __name__ == '__main__':
       return;
     }
     setStateRes({ waiting: true });
+    setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
     setResponse({ out: "Running... 🏃🏻" });
     axios
       .post(
@@ -198,7 +196,7 @@ if __name__ == '__main__':
         console.log(res);
         setResponse(res.data);
         setStateRes({ waiting: false });
-        setStateAlert({ open: true, text: "実行完了 🎉" });
+        setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
         // Login userかつcode Id 指定ならCodeを更新
         if (auth.Token && page_param_code_id && auth.id === user_id) {
           const inputElementURL = document.getElementById("codeTitle");
@@ -230,7 +228,11 @@ if __name__ == '__main__':
                 window.alert("再ログインしてください。");
                 return;
               }
-              setStateAlert({ open: true, text: "📋 コードを保存しました" });
+              setSnackbar({
+                isOpen: true,
+                text: "📋 コードを保存しました",
+                color: "success",
+              });
             })
             .catch((err) => {
               console.log(err);
@@ -259,34 +261,9 @@ if __name__ == '__main__':
   return (
     <>
       <Header />
-      <Snackbar
-        autoHideDuration={3500}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={open}
-        onClose={handleClose}
-      >
-        <MuiAlert
-          color="success"
-          severity="success"
-          elevation={6}
-          variant="filled"
-        >
-          {text}
-        </MuiAlert>
-      </Snackbar>
-      {/* 実行中 */}
-      <Snackbar
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={waiting}
-        onClose={handleClose}
-        message="I love snacks"
-      >
-        <MuiAlert color="info" severity="info" elevation={6} variant="filled">
-          実行中...
-        </MuiAlert>
-      </Snackbar>
-      {/*  */}
+
+      <MySnackbar />
+
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 2em" }}>
         <Grid container spacing={2}>
           <Grid item xs={9}>
@@ -317,7 +294,9 @@ if __name__ == '__main__':
                   />
                 </>
               )}
-              <h4 style={{ textAlign: "center", margin: "5px" }}>コード</h4>
+              <h4 style={{ textAlign: "center", margin: "5px" }}>
+                コード<p>{String(SnackbarData.isOpen)}</p>
+              </h4>
               <Editor
                 height="70vh"
                 theme={mode}

@@ -64,8 +64,7 @@ function FirebaseAuthGoogleButton() {
           login_time: "",
         });
       } else {
-        // nothing
-        //window.alert("ログイン中");
+        // do nothing
       }
     })();
   }, []);
@@ -91,15 +90,6 @@ function FirebaseAuthGoogleButton() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    //ユーザー情報変数
-    // DB情報
-    let tmp_id = "";
-    let tmp_name = "";
-    let tmp_picrure = "";
-    // 認証情報
-    let tmp_Token = "";
-    let tmp_login_time = "";
-    let tmp_refreshToken = "";
 
     // 認証処理
     // signInWithPopupメソッドを叩くと、認証用のポップアップ画面が表示される。
@@ -118,7 +108,6 @@ function FirebaseAuthGoogleButton() {
         const refreshToken = user.refreshToken;
         // ローカルストレージにrefreshTokenを保存
         localStorage.setItem("refreshToken", refreshToken);
-        tmp_refreshToken = refreshToken;
 
         firebase
           .auth()
@@ -129,10 +118,8 @@ function FirebaseAuthGoogleButton() {
             console.log(idToken);
             //ローカルストレージにTokenを保存
             localStorage.setItem("Token", idToken);
-            tmp_Token = idToken;
             // ログイン時間
             localStorage.setItem("login_time", String(new Date()));
-            tmp_login_time = String(new Date());
             axios
               .post(
                 "https://play-lang.herokuapp.com/login",
@@ -150,10 +137,6 @@ function FirebaseAuthGoogleButton() {
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
-                //
-                tmp_name = res.data.user_name;
-                tmp_picrure = res.data.user_picture;
-                tmp_id = res.data.user_id;
                 // /user/createにPost
                 axios
                   .post(
@@ -185,17 +168,13 @@ function FirebaseAuthGoogleButton() {
                             "user_picture",
                             res.data.user.picture
                           );
-                          //
-                          tmp_name = res.data.user.name;
-                          tmp_picrure = res.data.user.picture;
-                          tmp_id = res.data.user.id;
                           setAuth({
-                            Token: tmp_Token,
-                            refreshToken: tmp_refreshToken,
-                            name: tmp_name,
-                            picrure: tmp_picrure,
-                            id: tmp_id,
-                            login_time: tmp_login_time,
+                            Token: localStorage.getItem("Token"),
+                            name: localStorage.getItem("user_name"),
+                            picture: localStorage.getItem("user_picture"),
+                            id: localStorage.getItem("user_id"),
+                            refreshToken: localStorage.getItem("refreshToken"),
+                            login_time: localStorage.getItem("login_time"),
                           });
                         })
                         .catch((err) => {
@@ -204,12 +183,12 @@ function FirebaseAuthGoogleButton() {
                     } else {
                       //ユーザーが存在していなかった場合
                       setAuth({
-                        Token: tmp_Token,
-                        refreshToken: tmp_refreshToken,
-                        name: tmp_name,
-                        picrure: tmp_picrure,
-                        id: tmp_id,
-                        login_time: tmp_login_time,
+                        Token: localStorage.getItem("Token"),
+                        name: localStorage.getItem("user_name"),
+                        picture: localStorage.getItem("user_picture"),
+                        id: localStorage.getItem("user_id"),
+                        refreshToken: localStorage.getItem("refreshToken"),
+                        login_time: localStorage.getItem("login_time"),
                       });
                     }
                   })
@@ -221,14 +200,6 @@ function FirebaseAuthGoogleButton() {
                   });
                 setAnchorElUser(false);
                 //Login!!
-                // setAuth({
-                //   Token: tmp_Token,
-                //   refreshToken: tmp_refreshToken,
-                //   name: tmp_name,
-                //   picrure: tmp_picrure,
-                //   id: tmp_id,
-                //   login_time: tmp_login_time,
-                // });
               })
               .catch((error) => {
                 console.log("Error : " + JSON.stringify(error));
@@ -238,7 +209,6 @@ function FirebaseAuthGoogleButton() {
           .catch(function (error) {
             window.alert("error can not get current user:" + error);
           });
-        // ...
       })
       .catch((error) => {
         console.log(error);
