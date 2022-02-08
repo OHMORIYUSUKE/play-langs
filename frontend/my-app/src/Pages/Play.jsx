@@ -35,6 +35,8 @@ import MySnackbar from "../components/MySnackbar";
 
 import { SnackbarState } from "../store/PlayPage/Snackbar";
 
+import { CopyText } from "../utils/CopyText";
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -123,7 +125,7 @@ if __name__ == '__main__':
 
   const [mode, setMode] = useState("vs-dark");
 
-  /////
+  // /////
   let colorOutBackGround = "#1E1E1E";
   let colorOutFont = "white";
   if (mode === "light") {
@@ -134,39 +136,21 @@ if __name__ == '__main__':
   const handleChangeMode = (event) => {
     setMode(event.target.value);
   };
-  ///////////
-  function copyToClipboard(textToCopy) {
-    // navigator clipboard api needs a secure context (https)
-    if (navigator.clipboard && window.isSecureContext) {
-      // navigator clipboard api method'
-      return navigator.clipboard.writeText(textToCopy);
-    } else {
-      // text area method
-      let textArea = document.createElement("textarea");
-      textArea.value = textToCopy;
-      // make the textarea out of viewport
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999999px";
-      textArea.style.top = "-999999px";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      return new Promise((res, rej) => {
-        // here the magic happens
-        document.execCommand("copy") ? res() : rej();
-        textArea.remove();
-      });
-    }
-  }
   function copy_to_clipboard() {
-    let element = document.getElementById("outPut");
-    var copyText = element.innerText;
-    try {
-      copyToClipboard(copyText);
-      //window.alert("コピーしました。");
-      setSnackbar({ isOpen: true, text: "コピーしました !", color: "success" });
-    } catch (error) {
-      window.alert("コピーできませんでした。");
+    const copyText = document.getElementById("outPut").innerText;
+    const flag = CopyText(copyText);
+    if (flag) {
+      setSnackbar({
+        isOpen: true,
+        text: "コピーしました !",
+        color: "success",
+      });
+    } else {
+      setSnackbar({
+        isOpen: true,
+        text: "コピーできませんでした。",
+        color: "error",
+      });
     }
   }
   ///
