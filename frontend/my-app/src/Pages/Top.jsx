@@ -140,12 +140,10 @@ if __name__ == '__main__':
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {[...Array(3)].map((_, i) => (
                 <Grid
-                  item
+                  container
                   xs={4}
-                  style={{
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
+                  justifyContent="center"
+                  alignItems="center"
                 >
                   <Skeleton
                     variant="circular"
@@ -157,7 +155,7 @@ if __name__ == '__main__':
                   <Skeleton
                     variant="text"
                     style={{
-                      width: "80%",
+                      width: "60%",
                       marginTop: "10px",
                     }}
                   />
