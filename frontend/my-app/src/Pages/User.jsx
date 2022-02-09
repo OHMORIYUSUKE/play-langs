@@ -43,7 +43,7 @@ function User() {
   //
   const [auth, setAuth] = useRecoilState(authState);
   // get Code
-  const [codeData, setCodeData] = React.useState({});
+  const [codeData, setCodeData] = React.useState([]);
 
   //コード削除
   const [delFlag, setDelFlag] = React.useState(false);
@@ -70,7 +70,7 @@ function User() {
           .then((res) => {
             console.log(res.data);
             if (res.data.message === "notfound") {
-              setCodeData(null);
+              setCodeData([]);
             } else {
               const reversedData = res.data.code?.reverse();
               setCodeData(reversedData);
@@ -228,7 +228,7 @@ function User() {
               <CreateCodeDialog />
             </>
           )}
-          {codeData === null && auth.id === page_param_user_id ? (
+          {codeData.length === 0 && auth.id === page_param_user_id ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 50 }}>
                 <h2>
