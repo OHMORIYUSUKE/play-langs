@@ -103,12 +103,15 @@ if __name__ == '__main__':
           />
         </DialogContent>
         <DialogActions>
-          <Button style={{ color: "red" }} onClick={handleCloseCode}>
+          <Button color="error" onClick={handleCloseCode}>
             閉じる
           </Button>
-          <Button onClick={createCode}>作成</Button>
+          <Button onClick={createCode} variant="contained" disableElevation>
+            作成
+          </Button>
         </DialogActions>
       </Dialog>
+      {/* ページに配置するボタン */}
       <Button
         style={{ marginBottom: "1.3em" }}
         onClick={handleClickOpenCode}

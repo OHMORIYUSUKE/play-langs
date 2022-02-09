@@ -69,7 +69,6 @@ function FirebaseAuthGoogleButton() {
         });
       } else {
         // nothing
-        //window.alert("ログイン中");
       }
     })();
   }, []);

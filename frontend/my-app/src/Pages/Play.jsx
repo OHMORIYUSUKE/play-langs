@@ -281,9 +281,7 @@ if __name__ == '__main__':
                   />
                 </>
               )}
-              <h4 style={{ textAlign: "center", margin: "5px" }}>
-                コード<p>{String(SnackbarData.isOpen)}</p>
-              </h4>
+              <h4 style={{ textAlign: "center", margin: "5px" }}>コード</h4>
               <Editor
                 height="70vh"
                 theme={mode}
@@ -421,7 +419,6 @@ if __name__ == '__main__':
                     コードを共有
                   </h4>
                   <a
-                    class="twitter"
                     href={`http://twitter.com/share?text=${defaultTitle}&hashtags=${"PlayLang"}&url=${
                       "https://play-lang.netlify.app/play/" + page_param_code_id
                     }`}

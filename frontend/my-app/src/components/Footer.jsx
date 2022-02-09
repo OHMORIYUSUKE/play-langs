@@ -20,7 +20,7 @@ function Footer() {
         <Toolbar>
           <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
             &copy; {`2021 - ${new Date().getFullYear()}`} Play Langs{"　"}
-            {"version 1.0.3"}
+            {"version 1.0.4"}
           </Typography>
           <Stack direction="row">
             <Link href={"https://twitter.com/uutan1108"}>

@@ -17,7 +17,13 @@ import Typography from "@mui/material/Typography";
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../store/Auth/auth";
+
 export default function EditUserProfileDialog() {
+  //
+  const [auth, setAuth] = useRecoilState(authState);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -57,11 +63,17 @@ export default function EditUserProfileDialog() {
           imageData ? imageData : localStorage.getItem("user_picture")
         );
         localStorage.setItem("user_name", res.data.message);
-        // setUserInfo({
-        //   user_id: localStorage.getItem("user_id"),
-        //   user_name: name,
-        //   user_picture: imageData,
-        // });
+        //
+        setAuth({
+          // DB情報
+          id: localStorage.getItem("user_id"),
+          name: name ? name : localStorage.getItem("user_name"),
+          picrure: imageData ? imageData : localStorage.getItem("user_picture"),
+          // 認証情報
+          Token: localStorage.getItem("Token"),
+          login_time: localStorage.getItem("login_time"),
+          refreshToken: localStorage.getItem("refreshToken"),
+        });
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error));
@@ -72,7 +84,7 @@ export default function EditUserProfileDialog() {
   }
 
   //base64
-  const [imageData, setImageData] = React.useState(null);
+  const [imageData, setImageData] = React.useState(auth.picrure);
   function onFileChange(e) {
     const files = e.target.files;
 
@@ -108,6 +120,7 @@ export default function EditUserProfileDialog() {
             type="text"
             fullWidth
             variant="standard"
+            defaultValue={auth.name}
           />
           <div style={{ marginTop: "20px" }}>
             <DialogContentText>アイコン画像を変更できます。</DialogContentText>
@@ -161,13 +174,15 @@ export default function EditUserProfileDialog() {
           {/*  */}
         </DialogContent>
         <DialogActions>
-          <Button style={{ color: "red" }} onClick={handleClose}>
+          <Button color="error" onClick={handleClose}>
             閉じる
           </Button>
-          <Button onClick={editProfile}>更新</Button>
+          <Button onClick={editProfile} variant="contained" disableElevation>
+            更新
+          </Button>
         </DialogActions>
       </Dialog>
-      {/* --ダイアログ-- */}
+      {/* ページに配置するボタン */}
       <Button
         onClick={handleClickOpen}
         variant="contained"

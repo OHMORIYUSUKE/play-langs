@@ -31,6 +31,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 
 import Skeleton from "@mui/material/Skeleton";
+import Pagination from "@mui/material/Pagination";
 
 import EditUserProfileDialog from "../components/EditUserProfileDialog";
 import CreateCodeDialog from "../components/CreateCodeDialog";
@@ -47,6 +48,17 @@ function User() {
   //コード削除
   const [delFlag, setDelFlag] = React.useState(false);
 
+  //pagenation
+  const dataPerPage = 6;
+  const [displayedItems, setDisplayedItems] = useState([]);
+  const [pageNum, setPageNum] = useState(1);
+  const handlePageChange = (event, value) => {
+    setPageNum(value);
+    setDisplayedItems(
+      codeData.slice((value - 1) * dataPerPage, value * dataPerPage)
+    );
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -56,7 +68,14 @@ function User() {
               page_param_user_id
           )
           .then((res) => {
-            setCodeData(res.data);
+            console.log(res.data);
+            if (res.data.message === "notfound") {
+              setCodeData(null);
+            } else {
+              const reversedData = res.data.code?.reverse();
+              setCodeData(reversedData);
+              setDisplayedItems(reversedData.slice(0, dataPerPage));
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -95,7 +114,7 @@ function User() {
         console.log(err);
       }
     })();
-  }, [page_param_user_id]);
+  }, [page_param_user_id, auth.name, auth.picrure]);
 
   const [userInfo, setUserInfo] = useState({
     user_name: null,
@@ -184,7 +203,6 @@ function User() {
           </Grid>
           <Grid item xs={1}>
             <a
-              class="twitter"
               href={`http://twitter.com/share?text=${user_name}&hashtags=${"PlayLang"}&url=${
                 "https://play-lang.netlify.app/user/" + user_id
               }`}
@@ -210,7 +228,7 @@ function User() {
               <CreateCodeDialog />
             </>
           )}
-          {codeData.message === "notfound" && auth.id === page_param_user_id ? (
+          {codeData === null && auth.id === page_param_user_id ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 50 }}>
                 <h2>
@@ -223,44 +241,61 @@ function User() {
           ) : (
             <>
               <Grid container spacing={2}>
-                {codeData.code?.map((data, i) => (
-                  <Grid item xs={4} style={{ order: -i }}>
-                    <Link
-                      href={`/play/${data.id}`}
-                      style={{ fontSize: "1.2rem" }}
-                    >
-                      {data.title}
-                    </Link>
-                    {auth.id !== page_param_user_id ? (
-                      <></>
-                    ) : (
-                      <>
-                        <div style={{ float: "right" }}>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            onClick={() => deleteCode(data.id)}
-                          >
-                            削除
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                    <Editor
-                      height="40vh"
-                      theme="vs-dark"
-                      language="python"
-                      defaultValue={data.code_text}
-                      options={{
-                        readOnly: "true",
-                        lineNumbers: false,
-                        minimap: {
-                          enabled: false,
-                        },
-                      }}
-                    />
-                  </Grid>
+                {displayedItems?.map((data, i) => (
+                  <>
+                    <Grid item xs={4}>
+                      <Link
+                        href={`/play/${data.id}`}
+                        style={{ fontSize: "1.2rem" }}
+                      >
+                        {data.title}
+                      </Link>
+                      {auth.id !== page_param_user_id ? (
+                        <></>
+                      ) : (
+                        <>
+                          <div style={{ float: "right" }}>
+                            <Button
+                              variant="outlined"
+                              color="error"
+                              onClick={() => deleteCode(data.id)}
+                            >
+                              削除
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                      <Editor
+                        height="40vh"
+                        theme="vs-dark"
+                        language="python"
+                        defaultValue={data.code_text}
+                        options={{
+                          readOnly: "true",
+                          lineNumbers: false,
+                          minimap: {
+                            enabled: false,
+                          },
+                        }}
+                      />
+                    </Grid>
+                  </>
                 ))}
+              </Grid>
+              <Grid
+                container
+                justifyContent="center"
+                alignItems="center"
+                style={{ marginTop: "20px" }}
+              >
+                <Pagination
+                  count={Math.ceil(codeData.length / dataPerPage)}
+                  page={pageNum}
+                  onChange={handlePageChange}
+                  size="large"
+                  color="primary"
+                  style={{ marginTop: "10px" }}
+                />
               </Grid>
             </>
           )}
