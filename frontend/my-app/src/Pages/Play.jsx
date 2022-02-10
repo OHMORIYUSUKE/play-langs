@@ -6,7 +6,6 @@ import { langs } from "../utils/langs";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
@@ -19,7 +18,6 @@ import TextField from "@mui/material/TextField";
 import { Divider } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
 import Avatar from "@mui/material/Avatar";
 
 import { styled } from "@mui/material/styles";

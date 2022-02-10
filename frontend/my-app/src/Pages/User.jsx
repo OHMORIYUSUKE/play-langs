@@ -2,8 +2,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
@@ -14,14 +12,11 @@ import { BrowserRouter as Router, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 import { deleteFlagState } from "../store/User/deleteFlag";
-
-import Skeleton from "@mui/material/Skeleton";
 import Pagination from "@mui/material/Pagination";
-
-import EditUserProfileDialog from "../components/EditUserProfileDialog";
 import CreateCodeDialog from "../components/CreateCodeDialog";
 
 import CodeCard from "../components/CodeCard";
+import UserPageUserInfo from "../components/UserPageUserInfo";
 
 function User() {
   let history = useHistory();
@@ -114,58 +109,12 @@ function User() {
       <Header />
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 10em" }}>
         <Grid container spacing={2} alignItems="center">
-          <Grid item xs={2}>
-            {user_picture ? (
-              <img
-                src={user_picture}
-                alt="プロフィール画像"
-                style={{
-                  borderRadius: "50%",
-                  width: "110px",
-                  height: "110px",
-                  objectFit: "cover",
-                }}
-              />
-            ) : (
-              <Skeleton
-                variant="circular"
-                style={{ width: "110px", height: "110px" }}
-              />
-            )}
-          </Grid>
-          <Grid item xs={7}>
-            {user_picture ? (
-              <h1>{user_name}</h1>
-            ) : (
-              <Typography variant="h2" style={{ width: "80%" }}>
-                <Skeleton />
-              </Typography>
-            )}
-          </Grid>
-          <Grid item xs={2}>
-            {auth.id !== page_param_user_id ? (
-              <></>
-            ) : (
-              <>
-                <EditUserProfileDialog />
-              </>
-            )}
-          </Grid>
-          <Grid item xs={1}>
-            <a
-              href={`http://twitter.com/share?text=${user_name}&hashtags=${"PlayLang"}&url=${
-                "https://play-lang.netlify.app/user/" + user_id
-              }`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Avatar
-                sx={{ width: 50, height: 50 }}
-                src="https://img.icons8.com/color/240/000000/twitter-circled--v1.png"
-                alt=""
-              />
-            </a>
-          </Grid>
+          <UserPageUserInfo
+            user_name={user_name}
+            user_picture={user_picture}
+            user_id={user_id}
+            isMe={auth.id === page_param_user_id}
+          />
         </Grid>
         <Box
           sx={{ flexGrow: 1 }}

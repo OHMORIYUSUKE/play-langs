@@ -4,7 +4,6 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Skeleton from "@mui/material/Skeleton";
 
 import pythonImg from "../images/python.png";
 

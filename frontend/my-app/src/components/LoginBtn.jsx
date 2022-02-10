@@ -1,8 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-import { useHistory } from "react-router-dom";
-
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 
@@ -13,15 +11,11 @@ import { firebaseConfig } from "../utils/firebase/firebaseConfig";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
