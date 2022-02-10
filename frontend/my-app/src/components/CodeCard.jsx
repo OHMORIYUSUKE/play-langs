@@ -8,11 +8,9 @@ import Link from "@mui/material/Link";
 
 import axios from "axios";
 
-import { deleteFlagState } from "../store/User/deleteFlag";
-import { authState } from "../store/Auth/auth";
+import { deleteFlagState } from "../store/UserPage/deleteFlag";
 
 export default function CodeCard(props) {
-  const [auth, setAuth] = useRecoilState(authState);
   const [deleteFlag, setDeleteFlagState] = useRecoilState(deleteFlagState);
 
   function deleteCode(id) {
@@ -55,9 +53,7 @@ export default function CodeCard(props) {
         <Link href={`/play/${props.id}`} style={{ fontSize: "1.2rem" }}>
           {props.title}
         </Link>
-        {auth.id !== props.page_param_user_id ? (
-          <></>
-        ) : (
+        {props.isMe ? (
           <>
             <div style={{ float: "right" }}>
               <Button
@@ -69,6 +65,8 @@ export default function CodeCard(props) {
               </Button>
             </div>
           </>
+        ) : (
+          <></>
         )}
         <Editor
           height="40vh"

@@ -11,7 +11,7 @@ import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
-import { deleteFlagState } from "../store/User/deleteFlag";
+import { deleteFlagState } from "../store/UserPage/deleteFlag";
 import Pagination from "@mui/material/Pagination";
 import CreateCodeDialog from "../components/CreateCodeDialog";
 
@@ -145,7 +145,7 @@ function User() {
                     id={data.id}
                     title={data.title}
                     code_text={data.code_text}
-                    page_param_user_id={page_param_user_id}
+                    isMe={auth.id === page_param_user_id}
                   />
                 ))}
               </Grid>
