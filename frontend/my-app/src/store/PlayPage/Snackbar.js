@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
-export const SnackbarState = atom({
-  key: "Snackbar",
+export const snackbarState = atom({
+  key: "snackbar",
   default: {
     isOpen: false,
     text: "",

@@ -20,11 +20,7 @@ import { Divider } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
-
 import Avatar from "@mui/material/Avatar";
-
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 import { styled } from "@mui/material/styles";
 
@@ -36,7 +32,7 @@ import { authState } from "../store/Auth/auth";
 
 import MySnackbar from "../components/MySnackbar";
 
-import { SnackbarState } from "../store/PlayPage/Snackbar";
+import { snackbarState } from "../store/PlayPage/snackbar";
 
 import { CopyText } from "../utils/CopyText";
 
@@ -51,7 +47,7 @@ function Play() {
   let { page_param_code_id } = useParams();
 
   const [auth, setAuth] = useRecoilState(authState);
-  const [SnackbarData, setSnackbar] = useRecoilState(SnackbarState);
+  const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
 
   //保存されたコードを取得
   // コードを管理

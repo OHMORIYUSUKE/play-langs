@@ -1,23 +1,9 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-
-import { dateTime2Tokyo } from "../utils/dateTime2Tokyo";
 
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
@@ -25,10 +11,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
-import loadingImage from "../images/Spinner-2.gif";
-
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
+import { deleteFlagState } from "../store/User/deleteFlag";
 
 import Skeleton from "@mui/material/Skeleton";
 import Pagination from "@mui/material/Pagination";
@@ -36,17 +21,17 @@ import Pagination from "@mui/material/Pagination";
 import EditUserProfileDialog from "../components/EditUserProfileDialog";
 import CreateCodeDialog from "../components/CreateCodeDialog";
 
+import CodeCard from "../components/CodeCard";
+
 function User() {
   let history = useHistory();
   let { page_param_user_id } = useParams();
-
-  //
+  // auth
   const [auth, setAuth] = useRecoilState(authState);
   // get Code
   const [codeData, setCodeData] = React.useState([]);
-
   //コード削除
-  const [delFlag, setDelFlag] = React.useState(false);
+  const [deleteFlag, setDeleteFlagState] = useRecoilState(deleteFlagState);
 
   //pagenation
   const dataPerPage = 6;
@@ -84,7 +69,7 @@ function User() {
         console.log(err);
       }
     })();
-  }, [delFlag]);
+  }, [deleteFlag]);
 
   //userInfo
   useEffect(() => {
@@ -121,41 +106,6 @@ function User() {
     user_picture: null,
     user_id: null,
   });
-
-  function deleteCode(id) {
-    var result = window.confirm("コードを削除しますか？");
-
-    if (result) {
-    } else {
-      return;
-    }
-    axios
-      .post(
-        "https://play-lang.herokuapp.com/code/delete",
-        {
-          id: id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("Token"),
-          },
-        }
-      )
-      .then(function (res) {
-        console.log(res.data);
-        if (res.data.error === "TokenError") {
-          window.alert("再ログインしてください");
-          return;
-        }
-        window.alert("ファイルを削除しました。");
-        setDelFlag(true);
-      })
-      .catch((error) => {
-        console.log("Error : " + JSON.stringify(error));
-        window.alert("サーバーでエラーが発生しました。/code/delete");
-      });
-  }
 
   const { user_id, user_name, user_picture } = userInfo;
 
@@ -242,44 +192,12 @@ function User() {
             <>
               <Grid container spacing={2}>
                 {displayedItems?.map((data, i) => (
-                  <>
-                    <Grid item xs={4}>
-                      <Link
-                        href={`/play/${data.id}`}
-                        style={{ fontSize: "1.2rem" }}
-                      >
-                        {data.title}
-                      </Link>
-                      {auth.id !== page_param_user_id ? (
-                        <></>
-                      ) : (
-                        <>
-                          <div style={{ float: "right" }}>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => deleteCode(data.id)}
-                            >
-                              削除
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                      <Editor
-                        height="40vh"
-                        theme="vs-dark"
-                        language="python"
-                        defaultValue={data.code_text}
-                        options={{
-                          readOnly: "true",
-                          lineNumbers: false,
-                          minimap: {
-                            enabled: false,
-                          },
-                        }}
-                      />
-                    </Grid>
-                  </>
+                  <CodeCard
+                    id={data.id}
+                    title={data.title}
+                    code_text={data.code_text}
+                    page_param_user_id={page_param_user_id}
+                  />
                 ))}
               </Grid>
               <Grid

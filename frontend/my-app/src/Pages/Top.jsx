@@ -13,6 +13,8 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 
+import TopPageUserIcon from "../components/TopPageUserIcon";
+
 function Top() {
   const [auth, setAuth] = useRecoilState(authState);
   //user情報(自分のみ)
@@ -139,60 +141,18 @@ if __name__ == '__main__':
           {isLoading ? (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {[...Array(3)].map((_, i) => (
-                <Grid
-                  container
-                  xs={4}
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Skeleton
-                    variant="circular"
-                    style={{
-                      height: "100px",
-                      width: "100px",
-                    }}
-                  />
-                  <Skeleton
-                    variant="text"
-                    style={{
-                      width: "60%",
-                      marginTop: "10px",
-                    }}
-                  />
-                </Grid>
+                <TopPageUserIcon isLoading={true} />
               ))}
             </Grid>
           ) : (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {userInfo?.map((user, i) => (
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                    order: -i,
-                  }}
-                >
-                  <a
-                    href={`/user/${user.id}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <div>
-                      <img
-                        src={user.picture}
-                        alt={user.name}
-                        style={{
-                          borderRadius: "50%",
-                          height: "100px",
-                          objectFit: "cover",
-                          width: "100px",
-                        }}
-                      />
-                      <p style={{ color: "black" }}>{user.name}</p>
-                    </div>
-                  </a>
-                </Grid>
+                <TopPageUserIcon
+                  i={i}
+                  id={user.id}
+                  name={user.name}
+                  picture={user.picture}
+                />
               ))}
             </Grid>
           )}

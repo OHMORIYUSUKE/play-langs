@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { SnackbarState } from "../store/PlayPage/Snackbar";
+import { snackbarState } from "../store/PlayPage/snackbar";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function MySnackbar() {
-  const [SnackbarData, setSnackbar] = useRecoilState(SnackbarState);
+  const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
 
   function handleClose() {
     setSnackbar({ isOpen: false, text: "", color: "" });
@@ -17,16 +17,16 @@ export default function MySnackbar() {
       <Snackbar
         autoHideDuration={3500}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={SnackbarData.isOpen}
+        open={snackbarData.isOpen}
         onClose={handleClose}
       >
         <MuiAlert
-          color={SnackbarData.color}
-          severity={SnackbarData.color}
+          color={snackbarData.color}
+          severity={snackbarData.color}
           elevation={6}
           variant="filled"
         >
-          {SnackbarData.text}
+          {snackbarData.text}
         </MuiAlert>
       </Snackbar>
     </>
