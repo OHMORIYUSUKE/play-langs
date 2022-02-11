@@ -24,7 +24,7 @@ import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { authState } from "../store/Auth/auth";
 
 import MySnackbar from "../components/MySnackbar";
@@ -36,6 +36,15 @@ import { snackbarState } from "../store/PlayPage/snackbar";
 import { editorThemeState } from "../store/PlayPage/editorTheme";
 
 import { responseResultState } from "../store/PlayPage/responseResult";
+
+import {
+  inputCodeDataState,
+  inputInputDataState,
+  inputTitleDataState,
+  inputUserIdDataState,
+} from "../store/PlayPage/inputData";
+
+import { getInputAllData } from "../store/PlayPage/getInputAllData";
 
 import { CopyText } from "../utils/CopyText";
 
@@ -54,25 +63,28 @@ function Play() {
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
   const [responseResult, setResponseResult] =
     useRecoilState(responseResultState);
+  const [inputCodeData, setInputCodeData] = useRecoilState(inputCodeDataState);
+  const [inputInputData, setInputInputData] =
+    useRecoilState(inputInputDataState);
+  const [inputTitleData, setInputTitleData] =
+    useRecoilState(inputTitleDataState);
+  const [inputUserIdData, setInputUserIdData] =
+    useRecoilState(inputUserIdDataState);
+  const [inputData, setInputData] = useRecoilState(getInputAllData);
 
-  //保存されたコードを取得
-  // コードを管理
-  const [codeData, setCodeData] = useState({
-    defaultCode: `def main():
+  const codeDefaultValue = `def main():
     string = input()
     print('Hello ' + string + ' !!')
-  
+
 if __name__ == '__main__':
-    main()`,
-    defaultInput: "Python",
-    defaultTitle: "",
-  });
-  const { defaultCode, defaultInput, defaultTitle, user_id } = codeData;
+    main()`;
+  const inputDefaultValue = "Python";
+  //保存されたコードを取得
   useEffect(() => {
     (async () => {
       try {
         // 編集画面
-        if (page_param_code_id !== "") {
+        if (page_param_code_id) {
           // window.alert("id指定");
           axios
             .get(
@@ -85,33 +97,23 @@ if __name__ == '__main__':
                 history.push("/error/指定されたプロジェクトがありません。");
                 return;
               }
-              setCodeData({
-                defaultCode: res.data.code.code_text,
-                defaultInput: res.data.code.input_text,
-                defaultTitle: res.data.code.title,
-                user_id: res.data.code.user_id,
-              });
-              setTitleValue(res.data.code.title);
+              setInputTitleData({ title: res.data.code.title });
+              setInputCodeData({ code: res.data.code.code_text });
+              setInputInputData({ input: res.data.code.input_text });
+              setInputUserIdData({ userId: res.data.code.user_id });
             })
             .catch((err) => {
               console.log(err);
             });
+        } else {
+          setInputCodeData({ code: codeDefaultValue });
+          setInputInputData({ input: inputDefaultValue });
         }
       } catch (err) {
         console.log(err);
       }
     })();
   }, []);
-
-  const editorRef = useRef(null);
-  function handleEditorDidMount(editor, monaco) {
-    editorRef.current = editor;
-  }
-
-  const editorRefIn = useRef(null);
-  function handleEditorDidMountIn(editor, monaco) {
-    editorRefIn.current = editor;
-  }
 
   function copy_to_clipboard() {
     const copyText = document.getElementById("outPut").innerText;
@@ -143,8 +145,8 @@ if __name__ == '__main__':
       .post(
         "https://play-lang.herokuapp.com/play",
         {
-          code: editorRef.current.getValue(),
-          input: editorRefIn.current.getValue(),
+          code: inputData.code,
+          input: inputData.input,
         },
         {
           headers: {
@@ -156,23 +158,26 @@ if __name__ == '__main__':
         console.log(res.data);
         setResponseResult({
           isRunning: false,
-          exitCode: res.data.out !== "" ? 0 : 1, //正常終了なら0
+          exitCode: res.data.out !== "" ? 1 : 0, //正常終了なら0
           out: res.data.out,
           error: res.data.err,
         });
         setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
         // Login userかつcode Id 指定ならCodeを更新
-        if (auth.Token && page_param_code_id && auth.id === user_id) {
-          const inputElementURL = document.getElementById("codeTitle");
-          const title = inputElementURL.value;
+        if (
+          auth.Token &&
+          page_param_code_id &&
+          auth.id === inputData.useId &&
+          responseResult.exitCode === 0 //正常終了のみ保存する
+        ) {
           axios
             .post(
               "https://play-lang.herokuapp.com/code/update",
               {
                 id: page_param_code_id,
-                title: title,
-                code: editorRef.current.getValue(),
-                input: editorRefIn.current.getValue(),
+                title: inputData.title,
+                code: inputData.code,
+                input: inputData.input,
               },
               {
                 headers: {
@@ -208,12 +213,6 @@ if __name__ == '__main__':
         window.alert("サーバーでエラーが発生しました。");
       });
   }
-  // input Title 用
-  const [title, setTitleValue] = useState();
-
-  const handleChangeTitle = (event) => {
-    setTitleValue(event.target.value);
-  };
 
   return (
     <>
@@ -227,22 +226,23 @@ if __name__ == '__main__':
             <Item>
               {!page_param_code_id ? (
                 <></>
-              ) : page_param_code_id && auth.id === user_id ? (
+              ) : page_param_code_id && auth.id === inputData.useId ? (
                 <>
                   <TextField
                     label="ファイル名"
-                    id="codeTitle"
-                    value={title}
+                    value={inputData.title}
                     size="small"
                     fullWidth
-                    onChange={handleChangeTitle}
+                    onChange={(event) =>
+                      setInputTitleData({ title: event.target.value })
+                    }
                   />
                 </>
               ) : (
                 <>
                   <TextField
                     label="ファイル名"
-                    value={defaultTitle}
+                    value={inputData.title}
                     size="small"
                     fullWidth
                     InputProps={{
@@ -256,15 +256,15 @@ if __name__ == '__main__':
                 height="70vh"
                 theme={editorTheme.isDark === true ? "vs-dark" : "light"}
                 language={"python"}
-                defaultValue={defaultCode}
-                onMount={handleEditorDidMount}
+                defaultValue={inputData.code}
+                onChange={(value) => setInputCodeData({ code: value })}
               />
               <h4 style={{ textAlign: "center", margin: "5px" }}>標準入力</h4>
               <Editor
                 height="30vh"
                 theme={editorTheme.isDark === true ? "vs-dark" : "light"}
-                defaultValue={defaultInput}
-                onMount={handleEditorDidMountIn}
+                defaultValue={inputData.input}
+                onChange={(value) => setInputInputData({ input: value })}
               />
               <br />
               <h4 style={{ textAlign: "center", margin: "5px" }}>実行結果</h4>
@@ -380,7 +380,10 @@ if __name__ == '__main__':
                 )}
               </Item>
               <PlayPageRightSideDescription />
-              <PlayPageShareCode code_id={page_param_code_id} title={title} />
+              <PlayPageShareCode
+                code_id={page_param_code_id}
+                title={inputData.title}
+              />
             </div>
           </Grid>
         </Grid>
