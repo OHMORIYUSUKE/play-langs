@@ -131,6 +131,7 @@ if __name__ == '__main__':
   }
   ///
   function submit() {
+    setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
     setResponseResult({
       isRunning: true,
       exitCode: 0,
