@@ -18,7 +18,6 @@ import TextField from "@mui/material/TextField";
 import { Divider } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
-import Avatar from "@mui/material/Avatar";
 
 import { styled } from "@mui/material/styles";
 
@@ -29,6 +28,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../store/Auth/auth";
 
 import MySnackbar from "../components/MySnackbar";
+import PlayPageShareCode from "../components/PlayPageShareCode";
+import PlayPageRightSideDescription from "../components/PlayPageRightSideDescription";
 
 import { snackbarState } from "../store/PlayPage/snackbar";
 
@@ -378,33 +379,8 @@ if __name__ == '__main__':
                   </>
                 )}
               </Item>
-              <Item style={{ marginTop: "1rem" }}>
-                <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>
-                <p>３秒以内で実行できるコードにしてください。</p>
-                <p>※入力されたコードはPython 3.10.0で実行されます。</p>
-              </Item>
-              {page_param_code_id ? (
-                <Item style={{ marginTop: "1rem" }}>
-                  <h4 style={{ textAlign: "center", margin: "8px" }}>
-                    コードを共有
-                  </h4>
-                  <a
-                    href={`http://twitter.com/share?text=${defaultTitle}&hashtags=${"PlayLang"}&url=${
-                      "https://play-lang.netlify.app/play/" + page_param_code_id
-                    }`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Avatar
-                      sx={{ width: 50, height: 50 }}
-                      src="https://img.icons8.com/color/240/000000/twitter-circled--v1.png"
-                      alt=""
-                    />
-                  </a>
-                </Item>
-              ) : (
-                <></>
-              )}
+              <PlayPageRightSideDescription />
+              <PlayPageShareCode code_id={page_param_code_id} title={title} />
             </div>
           </Grid>
         </Grid>
