@@ -32,6 +32,8 @@ import MySnackbar from "../components/MySnackbar";
 
 import { snackbarState } from "../store/PlayPage/snackbar";
 
+import { editorThemeState } from "../store/PlayPage/editorTheme";
+
 import { CopyText } from "../utils/CopyText";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -46,6 +48,7 @@ function Play() {
 
   const [auth, setAuth] = useRecoilState(authState);
   const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
+  const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
 
   //保存されたコードを取得
   // コードを管理
@@ -120,19 +123,6 @@ if __name__ == '__main__':
     setLang(event.target.value);
   };
 
-  const [mode, setMode] = useState("vs-dark");
-
-  // /////
-  let colorOutBackGround = "#1E1E1E";
-  let colorOutFont = "white";
-  if (mode === "light") {
-    colorOutBackGround = "";
-    colorOutFont = "black";
-  }
-
-  const handleChangeMode = (event) => {
-    setMode(event.target.value);
-  };
   function copy_to_clipboard() {
     const copyText = document.getElementById("outPut").innerText;
     const flag = CopyText(copyText);
@@ -278,7 +268,7 @@ if __name__ == '__main__':
               <h4 style={{ textAlign: "center", margin: "5px" }}>コード</h4>
               <Editor
                 height="70vh"
-                theme={mode}
+                theme={editorTheme.isDark === true ? "vs-dark" : "light"}
                 language={lang}
                 defaultValue={defaultCode}
                 onMount={handleEditorDidMount}
@@ -286,7 +276,7 @@ if __name__ == '__main__':
               <h4 style={{ textAlign: "center", margin: "5px" }}>標準入力</h4>
               <Editor
                 height="30vh"
-                theme={mode}
+                theme={editorTheme.isDark === true ? "vs-dark" : "light"}
                 defaultValue={defaultInput}
                 onMount={handleEditorDidMountIn}
               />
@@ -294,7 +284,7 @@ if __name__ == '__main__':
               <h4 style={{ textAlign: "center", margin: "5px" }}>実行結果</h4>
               <div
                 style={{
-                  backgroundColor: colorOutBackGround,
+                  backgroundColor: editorTheme.isDark === true ? "#1E1E1E" : "",
                   minHeight: "130px",
                   padding: "10px",
                   position: "relative",
@@ -325,7 +315,7 @@ if __name__ == '__main__':
                     id="outPut"
                     style={{
                       whiteSpace: "pre-wrap",
-                      color: colorOutFont,
+                      color: editorTheme.isDark === true ? "white" : "black",
                       overflowWrap: "break-word",
                     }}
                   >
@@ -349,13 +339,15 @@ if __name__ == '__main__':
                 <h4 style={{ textAlign: "center", margin: "8px" }}>設定</h4>
                 <FormControl size="small">
                   <Select
-                    value={mode}
-                    onChange={handleChangeMode}
+                    value={editorTheme.isDark === true ? "dark" : "light"}
+                    onChange={(event) =>
+                      setEditorTheme({ isDark: event.target.value === "dark" })
+                    }
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
                   >
                     <MenuItem value="light">ライト</MenuItem>
-                    <MenuItem value="vs-dark">ダーク</MenuItem>
+                    <MenuItem value="dark">ダーク</MenuItem>
                   </Select>
                   <FormHelperText>エディタのテーマを選択</FormHelperText>
                 </FormControl>
