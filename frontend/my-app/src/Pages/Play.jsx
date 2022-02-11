@@ -116,12 +116,6 @@ if __name__ == '__main__':
   function handleEditorDidMountIn(editor, monaco) {
     editorRefIn.current = editor;
   }
-  ///////////
-  const [lang, setLang] = useState("python");
-
-  const handleChangelang = (event) => {
-    setLang(event.target.value);
-  };
 
   function copy_to_clipboard() {
     const copyText = document.getElementById("outPut").innerText;
@@ -142,10 +136,6 @@ if __name__ == '__main__':
   }
   ///
   function submit() {
-    if (lang === "") {
-      window.alert("言語の種類が選択されていません。");
-      return;
-    }
     setStateRes({ waiting: true });
     setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
     setResponse({ out: "Running... 🏃🏻" });
@@ -155,7 +145,6 @@ if __name__ == '__main__':
         {
           code: editorRef.current.getValue(),
           input: editorRefIn.current.getValue(),
-          lang: lang,
         },
         {
           headers: {
@@ -180,7 +169,6 @@ if __name__ == '__main__':
                 title: title,
                 code: editorRef.current.getValue(),
                 input: editorRefIn.current.getValue(),
-                lang: lang,
               },
               {
                 headers: {
@@ -269,7 +257,7 @@ if __name__ == '__main__':
               <Editor
                 height="70vh"
                 theme={editorTheme.isDark === true ? "vs-dark" : "light"}
-                language={lang}
+                language={"python"}
                 defaultValue={defaultCode}
                 onMount={handleEditorDidMount}
               />
@@ -358,8 +346,7 @@ if __name__ == '__main__':
                 <h4 style={{ textAlign: "center", margin: "8px" }}>実行</h4>
                 <FormControl size="small">
                   <Select
-                    value={lang}
-                    onChange={handleChangelang}
+                    value={"python"}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
                   >
