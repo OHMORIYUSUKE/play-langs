@@ -34,6 +34,8 @@ import { snackbarState } from "../store/PlayPage/snackbar";
 
 import { editorThemeState } from "../store/PlayPage/editorTheme";
 
+import { responseResultState } from "../store/PlayPage/responseResult";
+
 import { CopyText } from "../utils/CopyText";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -49,6 +51,8 @@ function Play() {
   const [auth, setAuth] = useRecoilState(authState);
   const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
+  const [responseResult, setResponseResult] =
+    useRecoilState(responseResultState);
 
   //保存されたコードを取得
   // コードを管理
@@ -98,15 +102,6 @@ if __name__ == '__main__':
     })();
   }, []);
 
-  const [resState, setStateRes] = useState({
-    waiting: false,
-  });
-  const { waiting } = resState;
-
-  const [response, setResponse] = useState({
-    out: "",
-    err: "",
-  });
   const editorRef = useRef(null);
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -136,9 +131,12 @@ if __name__ == '__main__':
   }
   ///
   function submit() {
-    setStateRes({ waiting: true });
-    setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
-    setResponse({ out: "Running... 🏃🏻" });
+    setResponseResult({
+      isRunning: true,
+      exitCode: 0,
+      out: "Running... 🏃🏻",
+      error: "",
+    });
     axios
       .post(
         "https://play-lang.herokuapp.com/play",
@@ -153,9 +151,13 @@ if __name__ == '__main__':
         }
       )
       .then((res) => {
-        console.log(res);
-        setResponse(res.data);
-        setStateRes({ waiting: false });
+        console.log(res.data);
+        setResponseResult({
+          isRunning: false,
+          exitCode: res.data.out !== "" ? 0 : 1, //正常終了なら0
+          out: res.data.out,
+          error: res.data.err,
+        });
         setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
         // Login userかつcode Id 指定ならCodeを更新
         if (auth.Token && page_param_code_id && auth.id === user_id) {
@@ -201,12 +203,6 @@ if __name__ == '__main__':
       })
       .catch((error) => {
         console.log("Error : " + JSON.stringify(error));
-        setStateRes({ waiting: false });
-        setResponse({
-          err:
-            "サーバーでエラーが発生しました。⚠\nError Message : " +
-            error.message,
-        });
         window.alert("サーバーでエラーが発生しました。");
       });
   }
@@ -287,7 +283,7 @@ if __name__ == '__main__':
                 >
                   <b>📋 コピー</b>
                 </Button>
-                {response.err ? (
+                {responseResult.error ? (
                   <code
                     id="outPut"
                     style={{
@@ -296,7 +292,7 @@ if __name__ == '__main__':
                       overflowWrap: "break-word",
                     }}
                   >
-                    {response.err}
+                    {responseResult.error}
                   </code>
                 ) : (
                   <code
@@ -307,7 +303,7 @@ if __name__ == '__main__':
                       overflowWrap: "break-word",
                     }}
                   >
-                    {response.out}
+                    {responseResult.out}
                   </code>
                 )}
               </div>
@@ -356,7 +352,7 @@ if __name__ == '__main__':
                   </Select>
                   <FormHelperText>実行したい言語を選択</FormHelperText>
                 </FormControl>
-                {waiting ? (
+                {responseResult.isRunning ? (
                   <>
                     <LoadingButton
                       loading
