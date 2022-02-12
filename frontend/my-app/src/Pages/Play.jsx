@@ -132,8 +132,6 @@ if __name__ == '__main__':
       });
     }
   }
-  //
-  // ビジーwaitを使う方法
   ///
   function submit() {
     setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
@@ -164,9 +162,18 @@ if __name__ == '__main__':
           out: res.data.out,
           error: res.data.err,
         });
-        setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
+        if ((res.data.out !== "" ? 0 : 1) === 0) {
+          setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
+        } else {
+          setSnackbar({ isOpen: true, text: "エラー 😢", color: "error" });
+        }
         // Login userかつcode Id 指定ならCodeを更新
-        if (auth.token && page_param_code_id && auth.id === inputData.useId) {
+        if (
+          auth.token &&
+          page_param_code_id &&
+          auth.id === inputData.useId &&
+          (res.data.out !== "" ? 0 : 1) === 0 //正常終了なら保存
+        ) {
           axios
             .post(
               "https://play-lang.herokuapp.com/code/update",
