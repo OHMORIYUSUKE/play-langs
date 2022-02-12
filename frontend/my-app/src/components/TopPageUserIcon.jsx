@@ -8,6 +8,7 @@ export default function TopPageUserIcon(props) {
       <>
         <Grid container xs={4} justifyContent="center" alignItems="center">
           <Skeleton
+            animation="wave"
             variant="circular"
             style={{
               height: "100px",
@@ -15,6 +16,7 @@ export default function TopPageUserIcon(props) {
             }}
           />
           <Skeleton
+            animation="wave"
             variant="text"
             style={{
               width: "60%",

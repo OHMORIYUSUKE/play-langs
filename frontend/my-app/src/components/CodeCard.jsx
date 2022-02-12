@@ -5,6 +5,7 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import Skeleton from "@mui/material/Skeleton";
 
 import axios from "axios";
 
@@ -72,6 +73,14 @@ export default function CodeCard(props) {
           height="40vh"
           theme="vs-dark"
           language="python"
+          loading={
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={"100%"}
+              animation="wave"
+            />
+          }
           defaultValue={props.code_text}
           options={{
             readOnly: "true",

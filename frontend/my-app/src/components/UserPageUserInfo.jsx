@@ -22,6 +22,7 @@ export default function UserPageUserInfo(props) {
           />
         ) : (
           <Skeleton
+            animation="wave"
             variant="circular"
             style={{ width: "110px", height: "110px" }}
           />
@@ -32,7 +33,7 @@ export default function UserPageUserInfo(props) {
           <h1>{props.user_name}</h1>
         ) : (
           <Typography variant="h2" style={{ width: "80%" }}>
-            <Skeleton />
+            <Skeleton animation="wave" />
           </Typography>
         )}
       </Grid>

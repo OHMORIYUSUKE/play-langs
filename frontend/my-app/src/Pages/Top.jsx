@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 
 import pythonImg from "../images/python.png";
 
@@ -13,6 +14,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
 import TopPageUserIcon from "../components/TopPageUserIcon";
+import TopPageLanguageLogo from "../components/TopPageLanguageLogo";
 
 function Top() {
   const [auth, setAuth] = useRecoilState(getAuthAllData);
@@ -113,19 +115,8 @@ if __name__ == '__main__':
           </h3>
 
           <Grid container spacing={2} style={{ padding: "0 1em" }}>
-            {logoList.map((logo) => (
-              <Grid
-                item
-                xs={4}
-                style={{ textAlign: "center", verticalAlign: "middle" }}
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.name}
-                  style={{ width: "100px" }}
-                />
-                <p>{logo.name}</p>
-              </Grid>
+            {logoList.map((data) => (
+              <TopPageLanguageLogo imgSrc={data.src} name={data.name} />
             ))}
           </Grid>
           <h3
@@ -162,6 +153,14 @@ if __name__ == '__main__':
             height="40vh"
             theme="vs-dark"
             language="python"
+            loading={
+              <Skeleton
+                variant="rectangular"
+                width={"100%"}
+                height={"100%"}
+                animation="wave"
+              />
+            }
             defaultValue={EditordefaultValue}
             options={{ readOnly: "true" }}
           />
