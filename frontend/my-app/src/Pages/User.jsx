@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authState } from "../store/Auth/auth";
+import { getAuthAllData } from "../store/Auth/getAuthAllData";
 import { deleteFlagState } from "../store/UserPage/deleteFlag";
 import Pagination from "@mui/material/Pagination";
 import CreateCodeDialog from "../components/CreateCodeDialog";
@@ -22,7 +22,7 @@ function User() {
   let history = useHistory();
   let { page_param_user_id } = useParams();
   // auth
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(getAuthAllData);
   // get Code
   const [codeData, setCodeData] = React.useState([]);
   //コード削除
@@ -94,7 +94,7 @@ function User() {
         console.log(err);
       }
     })();
-  }, [page_param_user_id, auth.name, auth.picrure]);
+  }, [page_param_user_id, auth.name, auth.picture]);
 
   const [userInfo, setUserInfo] = useState({
     user_name: null,

@@ -10,12 +10,12 @@ import pythonImg from "../images/python.png";
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authState } from "../store/Auth/auth";
+import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
 import TopPageUserIcon from "../components/TopPageUserIcon";
 
 function Top() {
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(getAuthAllData);
   //user情報(自分のみ)
   useEffect(() => {
     (async () => {
@@ -83,7 +83,7 @@ if __name__ == '__main__':
           <h2 style={{ fontWeight: "bolder" }}>
             他のユーザーのコードを編集しながら、プログラミングを学びましょう 🎉
           </h2>
-          {auth.Token ? (
+          {auth.token ? (
             <></>
           ) : (
             <>

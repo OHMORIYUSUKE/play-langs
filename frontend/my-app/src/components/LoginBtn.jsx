@@ -18,25 +18,37 @@ import MenuItem from "@mui/material/MenuItem";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authState } from "../store/Auth/auth";
+import {
+  authIdState,
+  authNameState,
+  authPicrureState,
+  authTokenState,
+  authRefreshTokenState,
+  authLoginTimeState,
+} from "../store/Auth/authData";
+import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
 function FirebaseAuthGoogleButton() {
-  const [auth, setAuth] = useRecoilState(authState);
+  const [id, setId] = useRecoilState(authIdState);
+  const [name, setName] = useRecoilState(authNameState);
+  const [picrure, setPicrure] = useRecoilState(authPicrureState);
+  const [token, setToken] = useRecoilState(authTokenState);
+  const [refreshToken, setRefreshToken] = useRecoilState(authRefreshTokenState);
+  const [loginTimeState, setLoginTimeState] =
+    useRecoilState(authLoginTimeState);
+  const [auth, setAuth] = useRecoilState(getAuthAllData);
 
   const [isLoading, setLoading] = useState(false);
   //ログインから1時間
   useEffect(() => {
     (async () => {
-      //
-      setAuth({
-        Token: localStorage.getItem("Token"),
-        refreshToken: localStorage.getItem("refreshToken"),
-        name: localStorage.getItem("user_name"),
-        picrure: localStorage.getItem("user_picture"),
-        id: localStorage.getItem("user_id"),
-        login_time: localStorage.getItem("login_time"),
-      });
-      //
+      // setAuth
+      setId({ id: localStorage.getItem("user_id") });
+      setName({ name: localStorage.getItem("user_name") });
+      setPicrure({ picrure: localStorage.getItem("user_picture") });
+      setToken({ token: localStorage.getItem("Token") });
+      setRefreshToken({ refreshToken: localStorage.getItem("refreshToken") });
+      setLoginTimeState({ loginTime: localStorage.getItem("login_time") });
       const loginTime = new Date(localStorage.getItem("login_time"));
       const D = new Date();
       const y = D.getFullYear();
@@ -46,21 +58,19 @@ function FirebaseAuthGoogleButton() {
       const min = D.getMinutes();
       const sec = D.getSeconds();
       var nowTime = new Date(y, month, d, h, min, sec);
-      // window.alert(loginTime + "\n" + nowTime);
       if (loginTime < nowTime) {
         localStorage.removeItem("Token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user_name");
         localStorage.removeItem("user_picture");
         localStorage.removeItem("user_id");
-        setAuth({
-          Token: "",
-          refreshToken: "",
-          name: "",
-          picrure: "",
-          id: "",
-          login_time: "",
-        });
+        // setAuth
+        setId({ id: localStorage.getItem("user_id") });
+        setName({ name: localStorage.getItem("user_name") });
+        setPicrure({ picrure: localStorage.getItem("user_picture") });
+        setToken({ token: localStorage.getItem("Token") });
+        setRefreshToken({ refreshToken: localStorage.getItem("refreshToken") });
+        setLoginTimeState({ loginTime: localStorage.getItem("login_time") });
       } else {
         // nothing
       }
@@ -90,16 +100,6 @@ function FirebaseAuthGoogleButton() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    //ユーザー情報変数
-    // DB情報
-    let tmp_id = "";
-    let tmp_name = "";
-    let tmp_picrure = "";
-    // 認証情報
-    let tmp_Token = "";
-    let tmp_login_time = "";
-    let tmp_refreshToken = "";
-
     // 認証処理
     // signInWithPopupメソッドを叩くと、認証用のポップアップ画面が表示される。
     // それにTwitterのIDとパスワードを入力すると、コールバックをfirebase側が処理し、
@@ -117,7 +117,7 @@ function FirebaseAuthGoogleButton() {
         const refreshToken = user.refreshToken;
         // ローカルストレージにrefreshTokenを保存
         localStorage.setItem("refreshToken", refreshToken);
-        tmp_refreshToken = refreshToken;
+        setRefreshToken({ refreshToken: refreshToken });
 
         firebase
           .auth()
@@ -128,10 +128,11 @@ function FirebaseAuthGoogleButton() {
             console.log(idToken);
             //ローカルストレージにTokenを保存
             localStorage.setItem("Token", idToken);
-            tmp_Token = idToken;
+            setToken({ token: localStorage.getItem("Token") });
             // ログイン時間
-            localStorage.setItem("login_time", String(new Date()));
-            tmp_login_time = String(new Date());
+            const loginTimeString = String(new Date());
+            localStorage.setItem("login_time", loginTimeString);
+            setLoginTimeState({ loginTime: loginTimeString });
             axios
               .post(
                 "https://play-lang.herokuapp.com/login",
@@ -149,10 +150,10 @@ function FirebaseAuthGoogleButton() {
                 localStorage.setItem("user_name", res.data.user_name);
                 localStorage.setItem("user_picture", res.data.user_picture);
                 localStorage.setItem("user_id", res.data.user_id);
-                //
-                tmp_name = res.data.user_name;
-                tmp_picrure = res.data.user_picture;
-                tmp_id = res.data.user_id;
+                // setAuth
+                setId({ id: res.data.user_id });
+                setName({ name: res.data.user_name });
+                setPicrure({ picrure: res.data.user_picture });
                 // /user/createにPost
                 axios
                   .post(
@@ -184,18 +185,10 @@ function FirebaseAuthGoogleButton() {
                             "user_picture",
                             res.data.user.picture
                           );
-                          //
-                          tmp_name = res.data.user.name;
-                          tmp_picrure = res.data.user.picture;
-                          tmp_id = res.data.user.id;
-                          setAuth({
-                            Token: tmp_Token,
-                            refreshToken: tmp_refreshToken,
-                            name: tmp_name,
-                            picrure: tmp_picrure,
-                            id: tmp_id,
-                            login_time: tmp_login_time,
-                          });
+                          // ユーザーが存在していた場合
+                          setId({ id: res.data.user.id });
+                          setName({ name: res.data.user.name });
+                          setPicrure({ picrure: res.data.user.picture });
                           setLoading(false);
                         })
                         .catch((err) => {
@@ -203,14 +196,6 @@ function FirebaseAuthGoogleButton() {
                         });
                     } else {
                       //ユーザーが存在していなかった場合
-                      setAuth({
-                        Token: tmp_Token,
-                        refreshToken: tmp_refreshToken,
-                        name: tmp_name,
-                        picrure: tmp_picrure,
-                        id: tmp_id,
-                        login_time: tmp_login_time,
-                      });
                       setLoading(false);
                     }
                   })
@@ -253,14 +238,13 @@ function FirebaseAuthGoogleButton() {
         localStorage.removeItem("user_id");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("login_time");
-        setAuth({
-          Token: "",
-          refreshToken: "",
-          name: "",
-          picrure: "",
-          id: "",
-          login_time: "",
-        });
+        // rmAuth
+        setId({ id: "" });
+        setName({ name: "" });
+        setPicrure({ picrure: "" });
+        setToken({ token: "" });
+        setRefreshToken({ refreshToken: "" });
+        setLoginTimeState({ loginTime: "" });
         window.alert("ログアウトしました。");
       })
       .catch((err) => {
@@ -292,11 +276,11 @@ function FirebaseAuthGoogleButton() {
         </>
       ) : (
         <>
-          {auth.Token ? (
+          {auth.token ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title={auth.name}>
                 <IconButton sx={{ p: 0 }} onClick={handleOpenNavMenu}>
-                  <Avatar alt={auth.name} src={auth.picrure} />
+                  <Avatar alt={auth.name} src={auth.picture} />
                 </IconButton>
               </Tooltip>
               <Menu

@@ -25,7 +25,7 @@ import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { authState } from "../store/Auth/auth";
+import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
 import MySnackbar from "../components/MySnackbar";
 import PlayPageShareCode from "../components/PlayPageShareCode";
@@ -58,7 +58,7 @@ function Play() {
   let history = useHistory();
   let { page_param_code_id } = useParams();
 
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(getAuthAllData);
   const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
   const [responseResult, setResponseResult] =
@@ -132,6 +132,8 @@ if __name__ == '__main__':
       });
     }
   }
+  //
+  // ビジーwaitを使う方法
   ///
   function submit() {
     setSnackbar({ isOpen: true, text: "実行中...", color: "info" });
@@ -158,18 +160,13 @@ if __name__ == '__main__':
         console.log(res.data);
         setResponseResult({
           isRunning: false,
-          exitCode: res.data.out !== "" ? 1 : 0, //正常終了なら0
+          exitCode: res.data.out !== "" ? 0 : 1, //正常終了なら0
           out: res.data.out,
           error: res.data.err,
         });
         setSnackbar({ isOpen: true, text: "実行完了 🎉", color: "success" });
         // Login userかつcode Id 指定ならCodeを更新
-        if (
-          auth.Token &&
-          page_param_code_id &&
-          auth.id === inputData.useId &&
-          responseResult.exitCode === 0 //正常終了のみ保存する
-        ) {
+        if (auth.token && page_param_code_id && auth.id === inputData.useId) {
           axios
             .post(
               "https://play-lang.herokuapp.com/code/update",

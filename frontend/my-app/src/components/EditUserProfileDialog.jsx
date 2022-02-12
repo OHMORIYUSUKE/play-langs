@@ -12,11 +12,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authState } from "../store/Auth/auth";
+import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
 export default function EditUserProfileDialog() {
   //
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(getAuthAllData);
 
   const [open, setOpen] = React.useState(false);
 
@@ -78,7 +78,7 @@ export default function EditUserProfileDialog() {
   }
 
   //base64
-  const [imageData, setImageData] = React.useState(auth.picrure);
+  const [imageData, setImageData] = React.useState(auth.picture);
   function onFileChange(e) {
     const files = e.target.files;
 
