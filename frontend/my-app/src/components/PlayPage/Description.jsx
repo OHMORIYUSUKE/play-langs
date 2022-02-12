@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Item } from "./utils/Item";
+import { Item } from "../utils/Item";
 
-export default function PlayPageRightSideDescription() {
+export default function Description() {
   return (
     <Item style={{ marginTop: "1rem" }}>
       <h4 style={{ textAlign: "center", margin: "8px" }}>注意事項</h4>

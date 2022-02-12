@@ -5,7 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import Skeleton from "@mui/material/Skeleton";
 import EditUserProfileDialog from "./EditUserProfileDialog";
 
-export default function UserPageUserInfo(props) {
+export default function UserInfo(props) {
   return (
     <>
       <Grid item xs={2}>

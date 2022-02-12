@@ -9,13 +9,13 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getAuthAllData } from "../store/Auth/getAuthAllData";
-import { getInputAllData } from "../store/PlayPage/getInputAllData";
+import { getAuthAllData } from "../../store/Auth/getAuthAllData";
+import { getInputAllData } from "../../store/PlayPage/getInputAllData";
 
-import { snackbarState } from "../store/PlayPage/snackbar";
-import { responseResultState } from "../store/PlayPage/responseResult";
+import { snackbarState } from "../../store/PlayPage/snackbar";
+import { responseResultState } from "../../store/PlayPage/responseResult";
 
-export default function PlayPageRunCode(props) {
+export default function RunCode(props) {
   const [auth, setAuth] = useRecoilState(getAuthAllData);
   const [inputData, setInputData] = useRecoilState(getInputAllData);
 

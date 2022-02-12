@@ -3,11 +3,11 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getAuthAllData } from "../store/Auth/getAuthAllData";
-import { getInputAllData } from "../store/PlayPage/getInputAllData";
-import { inputTitleDataState } from "../store/PlayPage/inputData";
+import { getAuthAllData } from "../../store/Auth/getAuthAllData";
+import { getInputAllData } from "../../store/PlayPage/getInputAllData";
+import { inputTitleDataState } from "../../store/PlayPage/inputData";
 
-export default function PlayPageInputTitle(props) {
+export default function InputTitle(props) {
   const [auth, setAuth] = useRecoilState(getAuthAllData);
   const [inputData, setInputData] = useRecoilState(getInputAllData);
 

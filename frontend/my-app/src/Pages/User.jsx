@@ -13,10 +13,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { getAuthAllData } from "../store/Auth/getAuthAllData";
 import { deleteFlagState } from "../store/UserPage/deleteFlag";
 import Pagination from "@mui/material/Pagination";
-import CreateCodeDialog from "../components/CreateCodeDialog";
+import CreateCodeDialog from "../components/UserPage/CreateCodeDialog";
 
-import CodeCard from "../components/CodeCard";
-import UserPageUserInfo from "../components/UserPageUserInfo";
+import CodeCard from "../components/UserPage/CodeCard";
+import UserInfo from "../components/UserPage/UserInfo";
 
 function User() {
   let history = useHistory();
@@ -109,7 +109,7 @@ function User() {
       <Header />
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 10em" }}>
         <Grid container spacing={2} alignItems="center">
-          <UserPageUserInfo
+          <UserInfo
             user_name={user_name}
             user_picture={user_picture}
             user_id={user_id}

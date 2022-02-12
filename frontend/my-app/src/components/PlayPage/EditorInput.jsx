@@ -2,10 +2,10 @@ import * as React from "react";
 import Editor from "@monaco-editor/react";
 import Skeleton from "@mui/material/Skeleton";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { editorThemeState } from "../store/PlayPage/editorTheme";
-import { inputInputDataState } from "../store/PlayPage/inputData";
+import { editorThemeState } from "../../store/PlayPage/editorTheme";
+import { inputInputDataState } from "../../store/PlayPage/inputData";
 
-export default function PlayPageEditorInput() {
+export default function EditorInput() {
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
   const [inputInputData, setInputInputData] =
     useRecoilState(inputInputDataState);

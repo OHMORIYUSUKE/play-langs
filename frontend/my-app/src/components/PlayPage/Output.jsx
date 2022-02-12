@@ -1,13 +1,13 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 
-import { CopyText } from "../utils/CopyText";
+import { CopyText } from "../../utils/CopyText";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { snackbarState } from "../store/PlayPage/snackbar";
-import { editorThemeState } from "../store/PlayPage/editorTheme";
-import { responseResultState } from "../store/PlayPage/responseResult";
+import { snackbarState } from "../../store/PlayPage/snackbar";
+import { editorThemeState } from "../../store/PlayPage/editorTheme";
+import { responseResultState } from "../../store/PlayPage/responseResult";
 
-export default function PlayPageOutput() {
+export default function Output() {
   const [snackbarData, setSnackbar] = useRecoilState(snackbarState);
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
   const [responseResult, setResponseResult] =

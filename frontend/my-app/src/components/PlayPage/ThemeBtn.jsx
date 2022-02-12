@@ -6,9 +6,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { editorThemeState } from "../store/PlayPage/editorTheme";
+import { editorThemeState } from "../../store/PlayPage/editorTheme";
 
-export default function PlayPageThemeBtn() {
+export default function ThemeBtn() {
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
   return (
     <>

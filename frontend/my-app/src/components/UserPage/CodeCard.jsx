@@ -9,7 +9,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 import axios from "axios";
 
-import { deleteFlagState } from "../store/UserPage/deleteFlag";
+import { deleteFlagState } from "../../store/UserPage/deleteFlag";
 
 export default function CodeCard(props) {
   const [deleteFlag, setDeleteFlagState] = useRecoilState(deleteFlagState);

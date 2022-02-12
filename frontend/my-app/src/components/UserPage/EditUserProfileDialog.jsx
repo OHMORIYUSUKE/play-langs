@@ -12,7 +12,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 import { useRecoilState, useRecoilValue } from "recoil";
-import { getAuthAllData } from "../store/Auth/getAuthAllData";
+import { getAuthAllData } from "../../store/Auth/getAuthAllData";
 
 export default function EditUserProfileDialog() {
   //

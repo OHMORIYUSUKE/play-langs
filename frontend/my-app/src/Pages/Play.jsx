@@ -16,9 +16,9 @@ import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import MySnackbar from "../components/MySnackbar";
-import PlayPageShareCode from "../components/PlayPageShareCode";
-import PlayPageRightSideDescription from "../components/PlayPageRightSideDescription";
+import MySnackbar from "../components/PlayPage/MySnackbar";
+import ShareCode from "../components/PlayPage/ShareCode";
+import Description from "../components/PlayPage/Description";
 
 import {
   inputCodeDataState,
@@ -29,13 +29,13 @@ import {
 
 import { getInputAllData } from "../store/PlayPage/getInputAllData";
 
-import PlayPageInputTitle from "../components/PlayPageInputTitle";
-import PlayPageEditorCode from "../components/PlayPageEditorCode";
-import PlayPageEditorInput from "../components/PlayPageEditorInput";
-import PlayPageOutput from "../components/PlayPageOutput";
-import PlayPageRunCode from "../components/PlayPageRunCode";
+import InputTitle from "../components/PlayPage/InputTitle";
+import EditorCode from "../components/PlayPage/EditorCode";
+import EditorInput from "../components/PlayPage/EditorInput";
+import Output from "../components/PlayPage/Output";
+import RunCode from "../components/PlayPage/RunCode";
 
-import PlayPageThemeBtn from "../components/PlayPageThemeBtn";
+import ThemeBtn from "../components/PlayPage/ThemeBtn";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -109,11 +109,11 @@ if __name__ == '__main__':
         <Grid container spacing={2}>
           <Grid item xs={9}>
             <Item>
-              <PlayPageInputTitle code_id={page_param_code_id} />
-              <PlayPageEditorCode />
-              <PlayPageEditorInput />
+              <InputTitle code_id={page_param_code_id} />
+              <EditorCode />
+              <EditorInput />
               <br />
-              <PlayPageOutput />
+              <Output />
             </Item>
           </Grid>
           {/* 設定(右側) */}
@@ -128,18 +128,15 @@ if __name__ == '__main__':
             >
               <Item>
                 <h4 style={{ textAlign: "center", margin: "8px" }}>設定</h4>
-                <PlayPageThemeBtn />
+                <ThemeBtn />
                 <br />
                 <br />
                 <Divider />
                 <br />
-                <PlayPageRunCode code_id={page_param_code_id} />
+                <RunCode code_id={page_param_code_id} />
               </Item>
-              <PlayPageRightSideDescription />
-              <PlayPageShareCode
-                code_id={page_param_code_id}
-                title={inputData.title}
-              />
+              <Description />
+              <ShareCode code_id={page_param_code_id} title={inputData.title} />
             </div>
           </Grid>
         </Grid>

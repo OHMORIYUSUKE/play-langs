@@ -1,7 +1,7 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 
-export default function TopPageLanguageLogo(props) {
+export default function LanguageLogo(props) {
   return (
     <>
       <Grid

@@ -13,8 +13,8 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { getAuthAllData } from "../store/Auth/getAuthAllData";
 
-import TopPageUserIcon from "../components/TopPageUserIcon";
-import TopPageLanguageLogo from "../components/TopPageLanguageLogo";
+import UserIcon from "../components/TopPage/UserIcon";
+import LanguageLogo from "../components/TopPage/LanguageLogo";
 
 function Top() {
   const [auth, setAuth] = useRecoilState(getAuthAllData);
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
           <Grid container spacing={2} style={{ padding: "0 1em" }}>
             {logoList.map((data) => (
-              <TopPageLanguageLogo imgSrc={data.src} name={data.name} />
+              <LanguageLogo imgSrc={data.src} name={data.name} />
             ))}
           </Grid>
           <h3
@@ -131,13 +131,13 @@ if __name__ == '__main__':
           {isLoading ? (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {[...Array(3)].map((_, i) => (
-                <TopPageUserIcon isLoading={true} />
+                <UserIcon isLoading={true} />
               ))}
             </Grid>
           ) : (
             <Grid container spacing={2} style={{ padding: "0 1em" }}>
               {userInfo?.map((user, i) => (
-                <TopPageUserIcon
+                <UserIcon
                   i={i}
                   id={user.id}
                   name={user.name}

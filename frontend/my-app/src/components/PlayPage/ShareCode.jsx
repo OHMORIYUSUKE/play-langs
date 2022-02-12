@@ -1,8 +1,8 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import { Item } from "./utils/Item";
+import { Item } from "../utils/Item";
 
-export default function PlayPageShareCode(props) {
+export default function ShareCode(props) {
   if (props.code_id) {
     return (
       <Item style={{ marginTop: "1rem" }}>

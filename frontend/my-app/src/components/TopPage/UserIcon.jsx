@@ -2,7 +2,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
 
-export default function TopPageUserIcon(props) {
+export default function UserIcon(props) {
   if (props.isLoading === true) {
     return (
       <>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { snackbarState } from "../store/PlayPage/snackbar";
+import { snackbarState } from "../../store/PlayPage/snackbar";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 export default function MySnackbar() {
