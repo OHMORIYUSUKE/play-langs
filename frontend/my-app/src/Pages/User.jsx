@@ -16,6 +16,7 @@ import Pagination from "@mui/material/Pagination";
 import CreateCodeDialog from "../components/UserPage/CreateCodeDialog";
 
 import CodeCard from "../components/UserPage/CodeCard";
+import Editor from "@monaco-editor/react";
 import UserInfo from "../components/UserPage/UserInfo";
 
 function User() {
@@ -54,7 +55,7 @@ function User() {
             } else {
               const reversedData = res.data.code?.reverse();
               setCodeData(reversedData);
-              setDisplayedItems(reversedData.slice(0, dataPerPage));
+              setDisplayedItems(reversedData?.slice(0, dataPerPage));
             }
           })
           .catch((err) => {
@@ -139,12 +140,14 @@ function User() {
             <>
               <Grid container spacing={2}>
                 {displayedItems?.map((data, i) => (
-                  <CodeCard
-                    id={data.id}
-                    title={data.title}
-                    code_text={data.code_text}
-                    isMe={auth.id === page_param_user_id}
-                  />
+                  <>
+                    <CodeCard
+                      id={data.id}
+                      title={data.title}
+                      code={data.code_text}
+                      isMe={auth.id === page_param_user_id}
+                    />
+                  </>
                 ))}
               </Grid>
               <Grid

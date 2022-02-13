@@ -81,7 +81,7 @@ export default function CodeCard(props) {
               animation="wave"
             />
           }
-          defaultValue={props.code_text}
+          value={props.code}
           options={{
             readOnly: "true",
             lineNumbers: false,
