@@ -3,10 +3,12 @@ import Editor from "@monaco-editor/react";
 import Skeleton from "@mui/material/Skeleton";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { editorThemeState } from "../../store/PlayPage/editorTheme";
+import { getInputAllData } from "../../store/PlayPage/getInputAllData";
 import { inputInputDataState } from "../../store/PlayPage/inputData";
 
 export default function EditorInput() {
   const [editorTheme, setEditorTheme] = useRecoilState(editorThemeState);
+  const [inputData, setInputData] = useRecoilState(getInputAllData);
   const [inputInputData, setInputInputData] =
     useRecoilState(inputInputDataState);
   return (
@@ -23,7 +25,7 @@ export default function EditorInput() {
           />
         }
         theme={editorTheme.isDark === true ? "vs-dark" : "light"}
-        defaultValue={inputInputData.input}
+        defaultValue={inputData.input}
         onChange={(value) => setInputInputData({ input: value })}
       />
     </>

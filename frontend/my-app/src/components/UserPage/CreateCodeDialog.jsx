@@ -13,6 +13,14 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 
+import {
+  inputCodeDataState,
+  inputInputDataState,
+  inputTitleDataState,
+} from "../../store/PlayPage/inputData";
+
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 export default function CreateCodeDialog() {
   let history = useHistory();
 
@@ -25,6 +33,12 @@ export default function CreateCodeDialog() {
   const handleCloseCode = () => {
     setOpenCode(false);
   };
+
+  const [inputCodeData, setInputCodeData] = useRecoilState(inputCodeDataState);
+  const [inputInputData, setInputInputData] =
+    useRecoilState(inputInputDataState);
+  const [inputTitleData, setInputTitleData] =
+    useRecoilState(inputTitleDataState);
 
   // コードを作成
   const defaultCode = `def main():
@@ -65,6 +79,9 @@ if __name__ == '__main__':
           window.alert("再ログインしてください");
           return;
         }
+        setInputCodeData({ code: defaultCode });
+        setInputInputData({ input: defaultInput });
+        setInputTitleData({ title: title });
         setOpenCode(false);
         window.alert("ファイルを作成しました。");
         history.push(`/play/${res.data.id.max}`);

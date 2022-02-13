@@ -102,17 +102,15 @@ function User() {
     user_id: null,
   });
 
-  const { user_id, user_name, user_picture } = userInfo;
-
   return (
     <>
       <Header />
       <Box sx={{ flexGrow: 1 }} style={{ padding: "0 10em" }}>
         <Grid container spacing={2} alignItems="center">
           <UserInfo
-            user_name={user_name}
-            user_picture={user_picture}
-            user_id={user_id}
+            user_name={userInfo.user_name}
+            user_picture={userInfo.user_picture}
+            user_id={userInfo.user_id}
             isMe={auth.id === page_param_user_id}
           />
         </Grid>
